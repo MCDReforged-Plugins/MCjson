@@ -1,6 +1,7 @@
 // Subset of http://msdn.microsoft.com/en-us/library/system.text.stringbuilder.aspx
 
-#pragma once
+#ifndef HPP_StringBuilder
+#define HPP_StringBuilder
 #include <list>
 #include <numeric>
 
@@ -108,4 +109,6 @@ public:
     }
 
 }; // class StringBuilder
+
+#endif
 

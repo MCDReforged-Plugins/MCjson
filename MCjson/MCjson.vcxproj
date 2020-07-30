@@ -73,24 +73,24 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.pyd</TargetExt>
-    <IncludePath>C:\Program Files (x86)\Windows Kits\10\Include;C:\Python\Python38\include;.;.\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files (x86)\Windows Kits\10\Include;C:\Python\Python38\include;.\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.pyd</TargetExt>
-    <IncludePath>C:\Program Files (x86)\Windows Kits\10\Include;C:\Python\Python38\include;.;.\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files (x86)\Windows Kits\10\Include;C:\Python\Python38\include;.\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.pyd</TargetExt>
-    <IncludePath>C:\Program Files (x86)\Windows Kits\10\Include;C:\Python\Python38\include;.;.\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files (x86)\Windows Kits\10\Include;C:\Python\Python38\include;.\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.pyd</TargetExt>
     <OutDir>$(SolutionDir)out\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>out\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>C:\Program Files (x86)\Windows Kits\10\Include;C:\Python\Python38\include;.;.\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files (x86)\Windows Kits\10\Include;C:\Python\Python38\include;.\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -156,7 +156,6 @@
   <ItemGroup>
     <ClInclude Include="include\brigadier.hpp" />
     <ClInclude Include="include\exceptions\BuiltInExceptions.hpp" />
-    <ClInclude Include="include\exceptions\CommandExceptionType.hpp" />
     <ClInclude Include="include\exceptions\Exception.hpp" />
     <ClInclude Include="include\Message.hpp" />
     <ClInclude Include="include\StringBuilder.hpp" />

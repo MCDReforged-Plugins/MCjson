@@ -1,8 +1,11 @@
-#pragma once
-
 // Subset of https://github.com/Mojang/brigadier
-#include<StringReader.hpp>
-#include<Message.hpp>
-#include<exceptions/CommandExceptionType.hpp>
-#include<exceptions/BuiltInExceptions.hpp>
-#include<exceptions/Exception.hpp>
+
+
+#ifndef brigadier_HPP
+#define brigadier_HPP
+#include "StringReader.hpp"
+#include "StringBuilder.hpp"
+#include "Message.hpp"
+#include "exceptions/Exception.hpp"
+#include "exceptions/BuiltInExceptions.hpp"
+#endif

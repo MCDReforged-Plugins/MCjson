@@ -1,4 +1,5 @@
-#pragma once
+#ifndef brigadier_HPP_StringReader
+#define brigadier_HPP_StringReader
 
 #include <iostream>
 
@@ -103,3 +104,5 @@ namespace brigadier {
 		}
 	}
 }
+
+#endif
