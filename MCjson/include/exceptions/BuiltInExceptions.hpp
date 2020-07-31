@@ -38,7 +38,7 @@ namespace brigadier {
 	};
 
 	class BuiltInExceptions : public BuiltInExceptionProvider {
-
+	
 	};
 
 }

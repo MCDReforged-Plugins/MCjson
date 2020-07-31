@@ -17,8 +17,8 @@ namespace brigadier {
 		string str;
 	public:
 		LiteralMessage(string& s);
-		Message* clone();
-		string getString();
+		Message* clone() override;
+		string getString() override;
 		string toString();
 	};
 
