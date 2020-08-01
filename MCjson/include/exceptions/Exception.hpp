@@ -36,8 +36,8 @@ namespace brigadier {
 		string input;
 		int cursor = 0;
 	public:
-		const int CONTEXT_AMOUNT = 10;
-		//static const BuiltInExceptionProvider* const BUILT_IN_EXCEPTIONS = new BuiltInExceptions();
+		static const int CONTEXT_AMOUNT;
+		static const BuiltInExceptionProvider* BUILT_IN_EXCEPTIONS;
 		CommandSyntaxException(const CommandExceptionType* type, const Message* message);
 		CommandSyntaxException(const CommandExceptionType* type, const Message* message, const string& input, const int cursor);
 		CommandSyntaxException(const CommandSyntaxException& outher);
@@ -56,7 +56,7 @@ namespace brigadier {
 		Message* message = 0;
 	public:
 		SimpleCommandExceptionType(const Message* message);
-		SimpleCommandExceptionType(SimpleCommandExceptionType& outher);
+		SimpleCommandExceptionType(const SimpleCommandExceptionType& outher);
 		~SimpleCommandExceptionType() override;
 		string getTypeString();
 		CommandExceptionType* clone() override;
@@ -138,6 +138,10 @@ namespace brigadier {
 
 namespace brigadier {
 	
+	const int CommandSyntaxException::CONTEXT_AMOUNT = 10;
+	
+	const BuiltInExceptionProvider* CommandSyntaxException::BUILT_IN_EXCEPTIONS = new BuiltInExceptions();
+	
 	inline CommandSyntaxException::CommandSyntaxException(const CommandExceptionType* type, const Message* message) {
 		this->type = const_cast<CommandExceptionType*>(type);
 		this->message = const_cast<Message*>(message);
@@ -180,8 +184,8 @@ namespace brigadier {
 			}
 
 			//substring at java: builder.append(this.input.substring(Math.max(0, cursor - 10), cursor));
-			//Java(4, 8)[begin, end] -> C++(4, 4)[begin, length = end - begin]
-			builder.Append(this->input.substr(std::max(0, cursor - CONTEXT_AMOUNT), cursor - std::max(0, cursor - CONTEXT_AMOUNT)));
+			//Java(4, 8)[begin, end] -> C++(4, 4)[begin, length = end - begin + 1]
+			builder.Append(this->input.substr(std::max(0, cursor - CONTEXT_AMOUNT), cursor - std::max(0, cursor - CONTEXT_AMOUNT) + 1));
 			builder.Append("<--[HERE]");
 			return builder.ToString();
 		} else {
@@ -192,7 +196,7 @@ namespace brigadier {
 	string CommandSyntaxException::getMessage() {
 		string message = this->message->getString();
 		string context = this->getContext();
-		if (context.length()) {
+		if (!context.empty()) {
 			message = message + " at position " + std::to_string(this->cursor) + ": " + context;
 		}
 
@@ -205,7 +209,7 @@ namespace brigadier {
 
 	inline SimpleCommandExceptionType::SimpleCommandExceptionType( const Message* message) {this->message = const_cast<Message*>(message); }
 
-	inline SimpleCommandExceptionType::SimpleCommandExceptionType(SimpleCommandExceptionType& outher) { this->message = outher.message->clone(); }
+	inline SimpleCommandExceptionType::SimpleCommandExceptionType(const SimpleCommandExceptionType& outher) { this->message = outher.message->clone(); }
 
 	inline SimpleCommandExceptionType::~SimpleCommandExceptionType() { delete this->message; }
 

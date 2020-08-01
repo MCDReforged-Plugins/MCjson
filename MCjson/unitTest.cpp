@@ -9,6 +9,7 @@ using std::endl;
 class Test;
 class Test2;
 class Test3;
+class Test4;
 void test();
 Test* test2();
 
@@ -30,21 +31,31 @@ public:
 	Test* clone() { return new Test2(*this); }
 };
 
+typedef void (*Function)(int);
 class Test3 {
 private:
-	void (* func)(int);
+	Function func = 0;
 public:
 	Test3(void (*function)(int)) { this->func = function; };
 	void do_func() { this->func(1); }
 };
 
+class Test4 {
+private:
+	static const Test3* func_class;
+public:
+	void call() { const_cast<Test3*>(this->func_class)->do_func(); }
+};
 
+const Test3* Test4::func_class = new Test3([](int input) {cout << "call_int: " << input << endl; });
 
 
 void test() {
-	auto f = [](int input) {cout << "call_int: " << input << endl; };
-	Test3 o(f);
-	o.do_func();
+	int start = 0;
+	int end = 1;
+	string s("abcde");
+	string s2 = s.substr(start, end - start + 1);
+	cout << s2 << endl;
 }
 
 Test* test2() {

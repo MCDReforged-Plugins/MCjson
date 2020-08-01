@@ -103,6 +103,20 @@ namespace brigadier {
 			this->skip();
 		}
 	}
+
+	int StringReader::readInt() {
+		int start = this->cursor;
+
+		while (this->canRead() && this->isAllowedNumber(this->peek())) {
+			this->skip();
+		}
+
+		string number = this->str.substr(start, this->cursor - start + 1);
+		if (number.empty()) {
+			
+		};
+	}
+
 }
 
 #endif

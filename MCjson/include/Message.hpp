@@ -16,13 +16,13 @@ namespace brigadier {
 	private:
 		string str;
 	public:
-		LiteralMessage(string& s);
+		LiteralMessage(const string& s);
 		Message* clone() override;
 		string getString() override;
 		string toString();
 	};
 
-	inline LiteralMessage::LiteralMessage(string& s) { this->str = s; }
+	inline LiteralMessage::LiteralMessage(const string& s) { this->str = s; }
 
 	Message* LiteralMessage::clone() {
 		return new LiteralMessage(*this);

@@ -6,6 +6,6 @@
 #include "StringReader.hpp"
 #include "StringBuilder.hpp"
 #include "Message.hpp"
-#include "exceptions/Exception.hpp"
 #include "exceptions/BuiltInExceptions.hpp"
+#include "exceptions/Exception.hpp"
 #endif
