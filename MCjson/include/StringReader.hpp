@@ -2,31 +2,16 @@
 #define brigadier_HPP_StringReader
 
 #include <iostream>
-
+#include "ImmutableStringReader.hpp"
 using std::string;
 
 namespace brigadier {
-	// Subset of https://github.com/Mojang/brigadier/blob/master/src/main/java/com/mojang/brigadier/ImmutableStringReader.java
-	class ImmutableStringReader {
-	public:
-		virtual string getString() = 0;
-		virtual int getRemainingLength() = 0;
-		virtual int getTotalLength() = 0;
-		virtual int getCursor() = 0;
-		virtual string getRead() = 0;
-		virtual string getRemaining() = 0;
-		virtual bool canRead(int var1) = 0;
-		virtual bool canRead() = 0;
-		virtual char peek() = 0;
-		virtual char peek(int var1) = 0;
-	};
-
 	// Subset of https://github.com/Mojang/brigadier/blob/master/src/main/java/com/mojang/brigadier/StringReader.java
 	class StringReader : public ImmutableStringReader {
 	private:
-		const char SYNTAX_ESCAPE = '\\';
-		const char SYNTAX_DOUBLE_QUOTE = '"';
-		const char SYNTAX_SINGLE_QUOTE = '\'';
+		static const char SYNTAX_ESCAPE;
+		static const char SYNTAX_DOUBLE_QUOTE;
+		static const char SYNTAX_SINGLE_QUOTE;
 		string str;
 		int cursor = 0;
 	public:
@@ -53,6 +38,7 @@ namespace brigadier {
 		double readDouble();
 		float readFloat();
 		static bool isAllowedInUnquotedString(char c);
+		string readUnquotedString();
 		string readQuotedString();
 		string readStringUntil(char terminator);
 		string readString();
@@ -60,6 +46,10 @@ namespace brigadier {
 		void expect(char c);
 	};
 
+	const char StringReader::SYNTAX_ESCAPE = '\\';
+	const char StringReader::SYNTAX_DOUBLE_QUOTE = '"';
+	const char StringReader::SYNTAX_SINGLE_QUOTE = '\'';
+	
 	inline StringReader::StringReader(const StringReader& outher) {
 		this->str = outher.str;
 		this->cursor = outher.cursor;
@@ -105,7 +95,7 @@ namespace brigadier {
 	}
 
 	int StringReader::readInt() {
-		int start = this->cursor;
+		const int start = this->cursor;
 
 		while (this->canRead() && this->isAllowedNumber(this->peek())) {
 			this->skip();
@@ -123,6 +113,161 @@ namespace brigadier {
 				this->cursor = start;
 				throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerInvalidInt().createWithContext(this, number);
 			}
+		}
+	}
+
+	long StringReader::readLong() {
+		const int start = this->cursor;
+
+		while (this->canRead() && this->isAllowedNumber(this->peek())) {
+			this->skip();
+		}
+
+		string number = this->str.substr(start, this->cursor - start + 1);
+		if (number.empty()) {
+			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedLong().createWithContext(this);
+		}
+		else {
+			try {
+				return std::stol(number);
+			}
+			catch (std::invalid_argument) {
+				this->cursor = start;
+				throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerInvalidLong().createWithContext(this, number);
+			}
+		}
+	}
+
+	double StringReader::readDouble() {
+		const int start = this->cursor;
+
+		while (this->canRead() && this->isAllowedNumber(this->peek())) {
+			this->skip();
+		}
+
+		string number = this->str.substr(start, this->cursor - start + 1);
+		if (number.empty()) {
+			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedDouble().createWithContext(this);
+		}
+		else {
+			try {
+				return std::stol(number);
+			}
+			catch (std::invalid_argument) {
+				this->cursor = start;
+				throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerInvalidDouble().createWithContext(this, number);
+			}
+		}
+	}
+
+	float StringReader::readFloat() {
+		const int start = this->cursor;
+
+		while (this->canRead() && this->isAllowedNumber(this->peek())) {
+			this->skip();
+		}
+
+		string number = this->str.substr(start, this->cursor - start + 1);
+		if (number.empty()) {
+			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedFloat().createWithContext(this);
+		}
+		else {
+			try {
+				return std::stol(number);
+			}
+			catch (std::invalid_argument) {
+				this->cursor = start;
+				throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerInvalidFloat().createWithContext(this, number);
+			}
+		}
+	}
+
+	inline bool StringReader::isAllowedInUnquotedString(char c) {
+		return c >= '0' && c <= '9'
+			|| c >= 'A' && c <= 'Z'
+			|| c >= 'a' && c <= 'z'
+			|| c == '_' || c == '-'
+			|| c == '.' || c == '+';
+	}
+
+	string StringReader::readUnquotedString() {
+		const int start = this->cursor;
+		while (this->canRead() && isAllowedInUnquotedString(this->peek())) {
+			this->skip();
+		}
+		return this->str.substr(start, this->cursor - start + 1);
+	}
+
+	string StringReader::readQuotedString() {
+		if (!this->canRead()) {
+			return "";
+		} else {
+			const char next = this->peek();
+			if (!isQuotedStringStart(next)) {
+				throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedStartOfQuote().createWithContext(this);
+			}
+			this->skip();
+			return this->readStringUntil(next);
+		}
+	}
+
+	string StringReader::readStringUntil(char terminator) {
+		StringBuilder<char> result;
+		bool escaped = false;
+		while (this->canRead()) {
+			const char c = this->read();
+			if (escaped) {
+				if (c == terminator || c == SYNTAX_ESCAPE) {
+					result.Append({c,0});
+					escaped = false;
+				} else {
+					this->setCursor(this->getCursor() - 1);
+					throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerInvalidEscape().createWithContext(this, string({ c,0 }));
+				}
+			} else if (c == SYNTAX_ESCAPE) {
+				escaped = true;
+			} else if (c == terminator) {
+				return result.ToString();
+			} else {
+				result.Append({ c,0 });
+;			}
+		}
+		
+		throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedEndOfQuote().createWithContext(this);
+	}
+
+	string StringReader::readString() {
+		if (!this->canRead()) {
+			return "";
+		}
+		const char next = this->peek();
+		if (isQuotedStringStart(next)) {
+			this->skip();
+			return this->readStringUntil(next);
+		}
+		return this->readUnquotedString();
+	}
+
+	bool StringReader::readBoolean() {
+		const int start = this->cursor;
+		const string value = this->readString();
+		if (value.empty()) {
+			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedBool().createWithContext(this);
+		}
+
+		if (value.compare("true")) {
+			return true;
+		} else if (value.compare("false")) {
+			return false;
+		} else {
+			this->cursor = start;
+			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerInvalidBool().createWithContext(this, value);
+		}
+	}
+
+	void StringReader::expect(char c) {
+		if (!this->canRead() || this->peek() != c) {
+			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedSymbol().createWithContext(this, string({ c,0 }));
 		}
 	}
 

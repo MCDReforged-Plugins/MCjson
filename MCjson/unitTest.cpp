@@ -11,7 +11,7 @@ class Test2;
 class Test3;
 class Test4;
 void test();
-Test* test2();
+string test2();
 
 class Test {
 public:
@@ -51,13 +51,13 @@ const Test3* Test4::func_class = new Test3([](int input) {cout << "call_int: " <
 
 
 void test() {
-	int start = 0;
-	int end = 1;
-	string s("abcde");
-	string s2 = s.substr(start, end - start + 1);
-	cout << s2 << endl;
+	string s;
+	s.append({ 't','r','u','e',0 });
+	bool r = s.compare("true");
+	bool z = (s.at(0) == 't');
+	cout << s << "\t" << r << "\t" << z << endl;;
 }
 
-Test* test2() {
-	
+string test2() {
+	return "";
 }

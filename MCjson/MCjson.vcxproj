@@ -157,6 +157,7 @@
     <ClInclude Include="include\brigadier.hpp" />
     <ClInclude Include="include\exceptions\BuiltInExceptions.hpp" />
     <ClInclude Include="include\exceptions\Exception.hpp" />
+    <ClInclude Include="include\ImmutableStringReader.hpp" />
     <ClInclude Include="include\Message.hpp" />
     <ClInclude Include="include\StringBuilder.hpp" />
     <ClInclude Include="include\StringReader.hpp" />

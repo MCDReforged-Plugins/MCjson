@@ -3,9 +3,9 @@
 
 #ifndef brigadier_HPP
 #define brigadier_HPP
-#include "StringReader.hpp"
-#include "StringBuilder.hpp"
 #include "Message.hpp"
 #include "exceptions/BuiltInExceptions.hpp"
 #include "exceptions/Exception.hpp"
+#include "StringReader.hpp"
+#include "StringBuilder.hpp"
 #endif

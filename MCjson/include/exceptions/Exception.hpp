@@ -4,8 +4,8 @@
 #include<string>
 #include<exception>
 #include<algorithm>
+#include "..\ImmutableStringReader.hpp"
 #include "..\StringBuilder.hpp"
-#include "..\StringReader.hpp"
 #include "..\Message.hpp"
 
 using std::string;
