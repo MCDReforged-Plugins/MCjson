@@ -113,8 +113,17 @@ namespace brigadier {
 
 		string number = this->str.substr(start, this->cursor - start + 1);
 		if (number.empty()) {
-			
-		};
+			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedInt().createWithContext(this);
+		} 
+		else {
+			try {
+				return std::stoi(number);
+			}
+			catch (std::invalid_argument) {
+				this->cursor = start;
+				throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerInvalidInt().createWithContext(this, number);
+			}
+		}
 	}
 
 }

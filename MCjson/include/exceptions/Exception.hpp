@@ -1,5 +1,4 @@
 #ifndef brigadier_HPP_Exception
-#define brigadier_HPP_Exception
 
 #include<iostream>
 #include<string>
@@ -14,6 +13,7 @@ using std::string;
 //Statement
 
 namespace brigadier {
+	class BuiltInExceptionProvider; //Include from BuiltInExceptions.hpp
 	class Exception{
 	public:
 		
@@ -139,8 +139,6 @@ namespace brigadier {
 namespace brigadier {
 	
 	const int CommandSyntaxException::CONTEXT_AMOUNT = 10;
-	
-	const BuiltInExceptionProvider* CommandSyntaxException::BUILT_IN_EXCEPTIONS = new BuiltInExceptions();
 	
 	inline CommandSyntaxException::CommandSyntaxException(const CommandExceptionType* type, const Message* message) {
 		this->type = const_cast<CommandExceptionType*>(type);
@@ -274,4 +272,13 @@ namespace brigadier {
 	}
 }
 
+#define brigadier_HPP_Exception
+#endif
+
+//Initialization BUILT_IN_EXCEPTIONS when included BuiltInExceptions.hpp
+#ifdef brigadier_HPP_BuiltInExceptions
+#ifndef brigadier_HPP_Exception_BUILT_IN_EXCEPTIONS
+const brigadier::BuiltInExceptionProvider* brigadier::CommandSyntaxException::BUILT_IN_EXCEPTIONS = new BuiltInExceptions();
+#define brigadier_HPP_Exception_BUILT_IN_EXCEPTIONS
+#endif
 #endif

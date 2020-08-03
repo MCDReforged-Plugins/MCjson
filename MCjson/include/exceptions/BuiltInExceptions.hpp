@@ -1,5 +1,4 @@
 #ifndef brigadier_HPP_BuiltInExceptions
-#define brigadier_HPP_BuiltInExceptions
 
 #include "Exception.hpp"
 
@@ -199,4 +198,5 @@ namespace brigadier {
 
 }
 
+#define brigadier_HPP_BuiltInExceptions
 #endif
