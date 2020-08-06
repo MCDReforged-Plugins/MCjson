@@ -136,6 +136,7 @@ namespace brigadier {
 
 //Implementation
 
+#ifdef brigadier_IMPLEMENTS
 namespace brigadier {
 	
 	const int CommandSyntaxException::CONTEXT_AMOUNT = 10;
@@ -271,6 +272,7 @@ namespace brigadier {
 		return CommandSyntaxException(new Dynamic4CommandExceptionType(*this), this->function(a, b, c, d), const_cast<ImmutableStringReader*>(reader)->getString(), const_cast<ImmutableStringReader*>(reader)->getCursor());
 	}
 }
+#endif
 
 #define brigadier_HPP_Exception
 #endif
@@ -278,7 +280,9 @@ namespace brigadier {
 //Initialization BUILT_IN_EXCEPTIONS when included BuiltInExceptions.hpp
 #ifdef brigadier_HPP_BuiltInExceptions
 #ifndef brigadier_HPP_Exception_BUILT_IN_EXCEPTIONS
+#ifdef brigadier_IMPLEMENTS
 const brigadier::BuiltInExceptionProvider* brigadier::CommandSyntaxException::BUILT_IN_EXCEPTIONS = new BuiltInExceptions();
 #define brigadier_HPP_Exception_BUILT_IN_EXCEPTIONS
+#endif
 #endif
 #endif

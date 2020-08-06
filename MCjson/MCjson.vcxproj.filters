@@ -21,27 +21,33 @@
     <ClCompile Include="unitTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="nbt\JsonToNBT.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="brigadier\brigadier.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\brigadier.hpp">
+    <ClInclude Include="brigadier\brigadier.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message.hpp">
+    <ClInclude Include="brigadier\ImmutableStringReader.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\StringBuilder.hpp">
+    <ClInclude Include="brigadier\Message.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\StringReader.hpp">
+    <ClInclude Include="brigadier\StringBuilder.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\exceptions\BuiltInExceptions.hpp">
+    <ClInclude Include="brigadier\StringReader.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\exceptions\Exception.hpp">
+    <ClInclude Include="brigadier\exceptions\BuiltInExceptions.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\ImmutableStringReader.hpp">
+    <ClInclude Include="brigadier\exceptions\Exception.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

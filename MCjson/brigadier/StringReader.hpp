@@ -46,6 +46,8 @@ namespace brigadier {
 		void expect(char c);
 	};
 
+#ifdef brigadier_IMPLEMENTS
+
 	const char StringReader::SYNTAX_ESCAPE = '\\';
 	const char StringReader::SYNTAX_DOUBLE_QUOTE = '"';
 	const char StringReader::SYNTAX_SINGLE_QUOTE = '\'';
@@ -270,6 +272,8 @@ namespace brigadier {
 			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedSymbol().createWithContext(this, string({ c,0 }));
 		}
 	}
+
+#endif
 
 }
 

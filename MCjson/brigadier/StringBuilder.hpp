@@ -31,6 +31,7 @@ public:
     }
     // TODO: Constructor that takes an array of strings.
 
+#ifdef brigadier_IMPLEMENTS
 
     StringBuilder& Append(const string_t& src) {
         append(src);
@@ -107,6 +108,8 @@ public:
         result += *iter;
         return std::accumulate(++iter, m_Data.end(), result, adr);
     }
+
+#endif
 
 }; // class StringBuilder
 

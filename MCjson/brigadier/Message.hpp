@@ -22,6 +22,8 @@ namespace brigadier {
 		string toString();
 	};
 
+#ifdef brigadier_IMPLEMENTS
+
 	inline LiteralMessage::LiteralMessage(const string& s) { this->str = s; }
 
 	Message* LiteralMessage::clone() {
@@ -31,6 +33,8 @@ namespace brigadier {
 	inline string LiteralMessage::getString() { return this->str; }
 
 	inline string LiteralMessage::toString() { return this->str; }
+
+#endif
 
 }
 #endif

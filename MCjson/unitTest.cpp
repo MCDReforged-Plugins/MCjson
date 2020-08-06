@@ -1,6 +1,10 @@
+#define BOOST_PYTHON_STATIC_LIB
+
 #include<iostream>
 #include<exception>
-#include "include/brigadier.hpp"
+//#include "include/brigadier.hpp"
+//#include "nbt/JsonToNBT.cpp"
+#include "brigadier/brigadier.h"
 
 using std::string;
 using std::cout;
@@ -51,11 +55,6 @@ const Test3* Test4::func_class = new Test3([](int input) {cout << "call_int: " <
 
 
 void test() {
-	string s;
-	s.append({ 't','r','u','e',0 });
-	bool r = s.compare("true");
-	bool z = (s.at(0) == 't');
-	cout << s << "\t" << r << "\t" << z << endl;;
 }
 
 string test2() {

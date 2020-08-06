@@ -107,7 +107,8 @@ namespace brigadier {
 		DynamicCommandExceptionType dispatcherParseException() override { return DISPATCHER_PARSE_EXCEPTION; }
 	};
 
-	
+#ifdef brigadier_IMPLEMENTS
+
 	const Dynamic2CommandExceptionType BuiltInExceptions::DOUBLE_TOO_SMALL = Dynamic2CommandExceptionType([](const string& found, const string& min)->Message* {
 		return new LiteralMessage("Double must not be less than " + min + ", found " + found); 
 		});
@@ -195,6 +196,8 @@ namespace brigadier {
 	const DynamicCommandExceptionType BuiltInExceptions::DISPATCHER_PARSE_EXCEPTION = DynamicCommandExceptionType([](const string& message)->Message* {
 		return new LiteralMessage("Could not parse command: " + message);
 		});
+
+#endif
 
 }
 
