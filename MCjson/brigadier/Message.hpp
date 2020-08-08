@@ -24,15 +24,15 @@ namespace brigadier {
 
 #ifdef brigadier_IMPLEMENTS
 
-	inline LiteralMessage::LiteralMessage(const string& s) { this->str = s; }
+	LiteralMessage::LiteralMessage(const string& s) { this->str = s; }
 
 	Message* LiteralMessage::clone() {
 		return new LiteralMessage(*this);
 	}
 
-	inline string LiteralMessage::getString() { return this->str; }
+	string LiteralMessage::getString() { return this->str; }
 
-	inline string LiteralMessage::toString() { return this->str; }
+	string LiteralMessage::toString() { return this->str; }
 
 #endif
 

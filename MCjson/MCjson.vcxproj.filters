@@ -50,5 +50,11 @@
     <ClInclude Include="brigadier\exceptions\Exception.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MCjson.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="nbt\nbt.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

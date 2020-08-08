@@ -163,6 +163,8 @@
     <ClInclude Include="brigadier\Message.hpp" />
     <ClInclude Include="brigadier\StringBuilder.hpp" />
     <ClInclude Include="brigadier\StringReader.hpp" />
+    <ClInclude Include="MCjson.h" />
+    <ClInclude Include="nbt\nbt.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

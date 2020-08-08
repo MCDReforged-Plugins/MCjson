@@ -15,8 +15,9 @@ namespace brigadier {
 		string str;
 		int cursor = 0;
 	public:
+		StringReader();
 		StringReader(const StringReader& outher);
-		StringReader(string string);
+		StringReader(string s);
 		string getString();
 		void setCursor(int cursor);
 		int getRemainingLength();
@@ -47,47 +48,50 @@ namespace brigadier {
 	};
 
 #ifdef brigadier_IMPLEMENTS
+//#pragma message("Build->StringReader")
 
 	const char StringReader::SYNTAX_ESCAPE = '\\';
 	const char StringReader::SYNTAX_DOUBLE_QUOTE = '"';
 	const char StringReader::SYNTAX_SINGLE_QUOTE = '\'';
 	
-	inline StringReader::StringReader(const StringReader& outher) {
+	StringReader::StringReader(const StringReader& outher) {
 		this->str = outher.str;
 		this->cursor = outher.cursor;
 	}
 
-	inline StringReader::StringReader(string string) { this->str = string; }
+	StringReader::StringReader() {}
+	
+	StringReader::StringReader(string s) { this->str = s; }
 
-	inline string StringReader::getString() { return this->str; }
+	string StringReader::getString() { return this->str; }
 
-	inline void StringReader::setCursor(int cursor) { this->cursor = cursor; }
+	void StringReader::setCursor(int cursor) { this->cursor = cursor; }
 
-	inline int StringReader::getRemainingLength() { return this->str.length() - this->cursor; }
+	int StringReader::getRemainingLength() { return this->str.length() - this->cursor; }
 
-	inline int StringReader::getTotalLength() { return this->str.length(); }
+	int StringReader::getTotalLength() { return this->str.length(); }
 
-	inline int StringReader::getCursor() { return this->cursor; }
+	int StringReader::getCursor() { return this->cursor; }
 
-	inline string StringReader::getRead() { return this->str.substr(0, this->cursor); }
+	string StringReader::getRead() { return this->str.substr(0, this->cursor); }
 
-	inline string StringReader::getRemaining() { return this->str.substr(this->cursor); }
+	string StringReader::getRemaining() { return this->str.substr(this->cursor); }
 
-	inline bool StringReader::canRead(int length) { return this->cursor + length <= this->str.length(); }
+	bool StringReader::canRead(int length) { return this->cursor + length <= this->str.length(); }
 
-	inline bool StringReader::canRead() { return this->canRead(1); }
+	bool StringReader::canRead() { return this->canRead(1); }
 
-	inline char StringReader::peek() { return this->str.at(this->cursor); }
+	char StringReader::peek() { return this->str.at(this->cursor); }
 
-	inline char StringReader::peek(int offset) { return this->str.at(this->cursor + offset); }
+	char StringReader::peek(int offset) { return this->str.at(this->cursor + offset); }
 
-	inline char StringReader::read() { return this->str.at(this->cursor++); }
+	char StringReader::read() { return this->str.at(this->cursor++); }
 
-	inline void StringReader::skip() { ++this->cursor; }
+	void StringReader::skip() { ++this->cursor; }
 
-	inline bool StringReader::isAllowedNumber(char c) { return c >= '0' && c <= '9' || c == '.' || c == '-'; }
+	 bool StringReader::isAllowedNumber(char c) { return c >= '0' && c <= '9' || c == '.' || c == '-'; }
 
-	inline bool StringReader::isQuotedStringStart(char c) { return c == '"' || c == '\''; }
+	bool StringReader::isQuotedStringStart(char c) { return c == '"' || c == '\''; }
 
 	void StringReader::skipWhitespace() {
 		while (this->canRead() && isspace(this->peek()))
@@ -184,7 +188,7 @@ namespace brigadier {
 		}
 	}
 
-	inline bool StringReader::isAllowedInUnquotedString(char c) {
+	bool StringReader::isAllowedInUnquotedString(char c) {
 		return c >= '0' && c <= '9'
 			|| c >= 'A' && c <= 'Z'
 			|| c >= 'a' && c <= 'z'

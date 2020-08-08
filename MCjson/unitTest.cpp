@@ -1,10 +1,11 @@
-#define BOOST_PYTHON_STATIC_LIB
+//#define BOOST_PYTHON_STATIC_LIB
 
 #include<iostream>
 #include<exception>
 //#include "include/brigadier.hpp"
 //#include "nbt/JsonToNBT.cpp"
-#include "brigadier/brigadier.h"
+//#include "brigadier/brigadier.h"
+#include "MCjson.h"
 
 using std::string;
 using std::cout;
@@ -14,7 +15,7 @@ class Test;
 class Test2;
 class Test3;
 class Test4;
-void test();
+boost::python::object test();
 string test2();
 
 class Test {
@@ -54,7 +55,9 @@ public:
 const Test3* Test4::func_class = new Test3([](int input) {cout << "call_int: " << input << endl; });
 
 
-void test() {
+boost::python::object test() {string s;
+	JsonToNBT tools(new brigadier::StringReader(""));
+	return tools.simple();
 }
 
 string test2() {
