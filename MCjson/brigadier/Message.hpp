@@ -1,38 +1,37 @@
 #ifndef brigadier_HPP_Message
 #define brigadier_HPP_Message
 
-#include<iostream>
-
-using std::string;
+//using std::string;
 
 namespace brigadier {
+	//Subset of https://github.com/Mojang/brigadier/blob/master/src/main/java/com/mojang/brigadier/Message.java
 	class Message {
 	public:
-		virtual string getString() = 0;
+		virtual std::string getString() = 0;
 		virtual Message* clone() = 0; //return new obj
 	};
 
 	class LiteralMessage : public Message {
 	private:
-		string str;
+		std::string str;
 	public:
-		LiteralMessage(const string& s);
+		LiteralMessage(const std::string& s);
 		Message* clone() override;
-		string getString() override;
-		string toString();
+		std::string getString() override;
+		std::string toString();
 	};
 
 #ifdef brigadier_IMPLEMENTS
 
-	LiteralMessage::LiteralMessage(const string& s) { this->str = s; }
+	LiteralMessage::LiteralMessage(const std::string& s) { this->str = s; }
 
 	Message* LiteralMessage::clone() {
 		return new LiteralMessage(*this);
 	}
 
-	string LiteralMessage::getString() { return this->str; }
+	std::string LiteralMessage::getString() { return this->str; }
 
-	string LiteralMessage::toString() { return this->str; }
+	std::string LiteralMessage::toString() { return this->str; }
 
 #endif
 

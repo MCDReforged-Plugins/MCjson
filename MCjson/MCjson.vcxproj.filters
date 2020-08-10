@@ -27,6 +27,9 @@
     <ClCompile Include="brigadier\brigadier.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="nbt\nbt.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="brigadier\brigadier.h">

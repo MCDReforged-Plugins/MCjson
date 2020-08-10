@@ -40,7 +40,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -82,8 +82,10 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <TargetExt>.pyd</TargetExt>
+    <TargetExt>.exe</TargetExt>
     <IncludePath>C:\Program Files (x86)\Windows Kits\10\Include;C:\Python\Python38\include;.\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)out\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>out\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -130,6 +132,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\Downloads\boost_1_73_0\bin\lib64-msvc-14.2-regex\lib;D:\Downloads\boost_1_73_0\bin\lib64-msvc-14.2-py38\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,6 +155,7 @@
   <ItemGroup>
     <ClCompile Include="brigadier\brigadier.cpp" />
     <ClCompile Include="nbt\JsonToNBT.cpp" />
+    <ClCompile Include="nbt\nbt.cpp" />
     <ClCompile Include="pyModule.cpp" />
     <ClCompile Include="unitTest.cpp" />
   </ItemGroup>

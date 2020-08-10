@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "ImmutableStringReader.hpp"
-using std::string;
+//using std::string;
 
 namespace brigadier {
 	// Subset of https://github.com/Mojang/brigadier/blob/master/src/main/java/com/mojang/brigadier/StringReader.java
@@ -12,19 +12,19 @@ namespace brigadier {
 		static const char SYNTAX_ESCAPE;
 		static const char SYNTAX_DOUBLE_QUOTE;
 		static const char SYNTAX_SINGLE_QUOTE;
-		string str;
+		std::string str;
 		int cursor = 0;
 	public:
 		StringReader();
 		StringReader(const StringReader& outher);
-		StringReader(string s);
-		string getString();
+		StringReader(std::string s);
+		std::string getString();
 		void setCursor(int cursor);
 		int getRemainingLength();
 		int getTotalLength();
 		int getCursor();
-		string getRead();
-		string getRemaining();
+		std::string getRead();
+		std::string getRemaining();
 		bool canRead(int length);
 		bool canRead();
 		char peek();
@@ -39,10 +39,10 @@ namespace brigadier {
 		double readDouble();
 		float readFloat();
 		static bool isAllowedInUnquotedString(char c);
-		string readUnquotedString();
-		string readQuotedString();
-		string readStringUntil(char terminator);
-		string readString();
+		std::string readUnquotedString();
+		std::string readQuotedString();
+		std::string readStringUntil(char terminator);
+		std::string readString();
 		bool readBoolean();
 		void expect(char c);
 	};
@@ -61,9 +61,9 @@ namespace brigadier {
 
 	StringReader::StringReader() {}
 	
-	StringReader::StringReader(string s) { this->str = s; }
+	StringReader::StringReader(std::string s) { this->str = s; }
 
-	string StringReader::getString() { return this->str; }
+	std::string StringReader::getString() { return this->str; }
 
 	void StringReader::setCursor(int cursor) { this->cursor = cursor; }
 
@@ -73,9 +73,9 @@ namespace brigadier {
 
 	int StringReader::getCursor() { return this->cursor; }
 
-	string StringReader::getRead() { return this->str.substr(0, this->cursor); }
+	std::string StringReader::getRead() { return this->str.substr(0, this->cursor); }
 
-	string StringReader::getRemaining() { return this->str.substr(this->cursor); }
+	std::string StringReader::getRemaining() { return this->str.substr(this->cursor); }
 
 	bool StringReader::canRead(int length) { return this->cursor + length <= this->str.length(); }
 
@@ -89,7 +89,7 @@ namespace brigadier {
 
 	void StringReader::skip() { ++this->cursor; }
 
-	 bool StringReader::isAllowedNumber(char c) { return c >= '0' && c <= '9' || c == '.' || c == '-'; }
+	bool StringReader::isAllowedNumber(char c) { return c >= '0' && c <= '9' || c == '.' || c == '-'; }
 
 	bool StringReader::isQuotedStringStart(char c) { return c == '"' || c == '\''; }
 
@@ -107,7 +107,7 @@ namespace brigadier {
 			this->skip();
 		}
 
-		string number = this->str.substr(start, this->cursor - start + 1);
+		std::string number = this->str.substr(start, this->cursor - start + 1);
 		if (number.empty()) {
 			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedInt().createWithContext(this);
 		} 
@@ -129,7 +129,7 @@ namespace brigadier {
 			this->skip();
 		}
 
-		string number = this->str.substr(start, this->cursor - start + 1);
+		std::string number = this->str.substr(start, this->cursor - start + 1);
 		if (number.empty()) {
 			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedLong().createWithContext(this);
 		}
@@ -151,7 +151,7 @@ namespace brigadier {
 			this->skip();
 		}
 
-		string number = this->str.substr(start, this->cursor - start + 1);
+		std::string number = this->str.substr(start, this->cursor - start + 1);
 		if (number.empty()) {
 			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedDouble().createWithContext(this);
 		}
@@ -173,7 +173,7 @@ namespace brigadier {
 			this->skip();
 		}
 
-		string number = this->str.substr(start, this->cursor - start + 1);
+		std::string number = this->str.substr(start, this->cursor - start + 1);
 		if (number.empty()) {
 			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedFloat().createWithContext(this);
 		}
@@ -196,7 +196,7 @@ namespace brigadier {
 			|| c == '.' || c == '+';
 	}
 
-	string StringReader::readUnquotedString() {
+	std::string StringReader::readUnquotedString() {
 		const int start = this->cursor;
 		while (this->canRead() && isAllowedInUnquotedString(this->peek())) {
 			this->skip();
@@ -204,7 +204,7 @@ namespace brigadier {
 		return this->str.substr(start, this->cursor - start + 1);
 	}
 
-	string StringReader::readQuotedString() {
+	std::string StringReader::readQuotedString() {
 		if (!this->canRead()) {
 			return "";
 		} else {
@@ -217,7 +217,7 @@ namespace brigadier {
 		}
 	}
 
-	string StringReader::readStringUntil(char terminator) {
+	std::string StringReader::readStringUntil(char terminator) {
 		StringBuilder<char> result;
 		bool escaped = false;
 		while (this->canRead()) {
@@ -228,7 +228,7 @@ namespace brigadier {
 					escaped = false;
 				} else {
 					this->setCursor(this->getCursor() - 1);
-					throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerInvalidEscape().createWithContext(this, string({ c,0 }));
+					throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerInvalidEscape().createWithContext(this, std::string({ c,0 }));
 				}
 			} else if (c == SYNTAX_ESCAPE) {
 				escaped = true;
@@ -242,7 +242,7 @@ namespace brigadier {
 		throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedEndOfQuote().createWithContext(this);
 	}
 
-	string StringReader::readString() {
+	std::string StringReader::readString() {
 		if (!this->canRead()) {
 			return "";
 		}
@@ -256,7 +256,7 @@ namespace brigadier {
 
 	bool StringReader::readBoolean() {
 		const int start = this->cursor;
-		const string value = this->readString();
+		const std::string value = this->readString();
 		if (value.empty()) {
 			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedBool().createWithContext(this);
 		}
@@ -273,7 +273,7 @@ namespace brigadier {
 
 	void StringReader::expect(char c) {
 		if (!this->canRead() || this->peek() != c) {
-			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedSymbol().createWithContext(this, string({ c,0 }));
+			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedSymbol().createWithContext(this, std::string({ c,0 }));
 		}
 	}
 

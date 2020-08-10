@@ -109,39 +109,39 @@ namespace brigadier {
 
 #ifdef brigadier_IMPLEMENTS
 
-	const Dynamic2CommandExceptionType BuiltInExceptions::DOUBLE_TOO_SMALL = Dynamic2CommandExceptionType([](const string& found, const string& min)->Message* {
+	const Dynamic2CommandExceptionType BuiltInExceptions::DOUBLE_TOO_SMALL = Dynamic2CommandExceptionType([](const std::string& found, const std::string& min)->Message* {
 		return new LiteralMessage("Double must not be less than " + min + ", found " + found); 
 		});
 
-	const Dynamic2CommandExceptionType BuiltInExceptions::DOUBLE_TOO_BIG = Dynamic2CommandExceptionType([](const string& found, const string& max)->Message* {
+	const Dynamic2CommandExceptionType BuiltInExceptions::DOUBLE_TOO_BIG = Dynamic2CommandExceptionType([](const std::string& found, const std::string& max)->Message* {
 		return new LiteralMessage("Double must not be more than " + max + ", found " + found);
 		});
 
-	const Dynamic2CommandExceptionType BuiltInExceptions::FLOAT_TOO_SMALL = Dynamic2CommandExceptionType([](const string& found, const string& min)->Message* {
+	const Dynamic2CommandExceptionType BuiltInExceptions::FLOAT_TOO_SMALL = Dynamic2CommandExceptionType([](const std::string& found, const std::string& min)->Message* {
 		return new LiteralMessage("Float must not be less than " + min + ", found " + found);
 		});
 
-	const Dynamic2CommandExceptionType BuiltInExceptions::FLOAT_TOO_BIG = Dynamic2CommandExceptionType([](const string& found, const string& max)->Message* {
+	const Dynamic2CommandExceptionType BuiltInExceptions::FLOAT_TOO_BIG = Dynamic2CommandExceptionType([](const std::string& found, const std::string& max)->Message* {
 		return new LiteralMessage("Float must not be more than " + max + ", found " + found);
 		});
 
-	const Dynamic2CommandExceptionType BuiltInExceptions::INTEGER_TOO_SMALL = Dynamic2CommandExceptionType([](const string& found, const string& min)->Message* {
+	const Dynamic2CommandExceptionType BuiltInExceptions::INTEGER_TOO_SMALL = Dynamic2CommandExceptionType([](const std::string& found, const std::string& min)->Message* {
 		return new LiteralMessage("Integer must not be less than " + min + ", found " + found);
 		});
 
-	const Dynamic2CommandExceptionType BuiltInExceptions::INTEGER_TOO_BIG = Dynamic2CommandExceptionType([](const string& found, const string& max)->Message* {
+	const Dynamic2CommandExceptionType BuiltInExceptions::INTEGER_TOO_BIG = Dynamic2CommandExceptionType([](const std::string& found, const std::string& max)->Message* {
 		return new LiteralMessage("Integer must not be more than " + max + ", found " + found);
 		});
 
-	const Dynamic2CommandExceptionType BuiltInExceptions::LONG_TOO_SMALL = Dynamic2CommandExceptionType([](const string& found, const string& min)->Message* {
+	const Dynamic2CommandExceptionType BuiltInExceptions::LONG_TOO_SMALL = Dynamic2CommandExceptionType([](const std::string& found, const std::string& min)->Message* {
 		return new LiteralMessage("Long must not be less than " + min + ", found " + found);
 		});
 
-	const Dynamic2CommandExceptionType BuiltInExceptions::LONG_TOO_BIG = Dynamic2CommandExceptionType([](const string& found, const string& max)->Message* {
+	const Dynamic2CommandExceptionType BuiltInExceptions::LONG_TOO_BIG = Dynamic2CommandExceptionType([](const std::string& found, const std::string& max)->Message* {
 		return new LiteralMessage("Long must not be more than " + max + ", found " + found);
 		});
 	
-	const DynamicCommandExceptionType BuiltInExceptions::LITERAL_INCORRECT = DynamicCommandExceptionType([](const string& expected)->Message* {
+	const DynamicCommandExceptionType BuiltInExceptions::LITERAL_INCORRECT = DynamicCommandExceptionType([](const std::string& expected)->Message* {
 		return new LiteralMessage("Expected literal " + expected); 
 		});
 
@@ -149,33 +149,33 @@ namespace brigadier {
 
 	const SimpleCommandExceptionType BuiltInExceptions::READER_EXPECTED_END_OF_QUOTE = SimpleCommandExceptionType(new LiteralMessage("Unclosed quoted string"));
 
-	const DynamicCommandExceptionType BuiltInExceptions::READER_INVALID_ESCAPE = DynamicCommandExceptionType([](const string& character)->Message* {
+	const DynamicCommandExceptionType BuiltInExceptions::READER_INVALID_ESCAPE = DynamicCommandExceptionType([](const std::string& character)->Message* {
 		return new LiteralMessage("Invalid escape sequence '" + character + "' in quoted string");
 		});
 
-	const DynamicCommandExceptionType BuiltInExceptions::READER_INVALID_BOOL = DynamicCommandExceptionType([](const string& value)->Message* {
+	const DynamicCommandExceptionType BuiltInExceptions::READER_INVALID_BOOL = DynamicCommandExceptionType([](const std::string& value)->Message* {
 		return new LiteralMessage("Invalid bool, expected true or false but found '" + value + "'");
 		});
 
-	const DynamicCommandExceptionType BuiltInExceptions::READER_INVALID_INT = DynamicCommandExceptionType([](const string& value)->Message* {
+	const DynamicCommandExceptionType BuiltInExceptions::READER_INVALID_INT = DynamicCommandExceptionType([](const std::string& value)->Message* {
 		return new LiteralMessage("Invalid integer '" + value + "'");
 		});
 
 	const SimpleCommandExceptionType BuiltInExceptions::READER_EXPECTED_INT = SimpleCommandExceptionType(new LiteralMessage("Expected integer"));
 
-	const DynamicCommandExceptionType BuiltInExceptions::READER_INVALID_LONG = DynamicCommandExceptionType([](const string& value)->Message* {
+	const DynamicCommandExceptionType BuiltInExceptions::READER_INVALID_LONG = DynamicCommandExceptionType([](const std::string& value)->Message* {
 		return new LiteralMessage("Invalid long '" + value + "'");
 		});
 
 	const SimpleCommandExceptionType BuiltInExceptions::READER_EXPECTED_LONG = SimpleCommandExceptionType(new LiteralMessage("Expected long"));
 
-	const DynamicCommandExceptionType BuiltInExceptions::READER_INVALID_DOUBLE = DynamicCommandExceptionType([](const string& value)->Message* {
+	const DynamicCommandExceptionType BuiltInExceptions::READER_INVALID_DOUBLE = DynamicCommandExceptionType([](const std::string& value)->Message* {
 		return new LiteralMessage("Invalid double '" + value + "'");
 		});
 
 	const SimpleCommandExceptionType BuiltInExceptions::READER_EXPECTED_DOUBLE = SimpleCommandExceptionType(new LiteralMessage("Expected double"));
 
-	const DynamicCommandExceptionType BuiltInExceptions::READER_INVALID_FLOAT = DynamicCommandExceptionType([](const string& value)->Message* {
+	const DynamicCommandExceptionType BuiltInExceptions::READER_INVALID_FLOAT = DynamicCommandExceptionType([](const std::string& value)->Message* {
 		return new LiteralMessage("Invalid float '" + value + "'");
 		});
 
@@ -183,7 +183,7 @@ namespace brigadier {
 
 	const SimpleCommandExceptionType BuiltInExceptions::READER_EXPECTED_BOOL = SimpleCommandExceptionType(new LiteralMessage("Expected bool"));
 
-	const DynamicCommandExceptionType BuiltInExceptions::READER_EXPECTED_SYMBOL = DynamicCommandExceptionType([](const string& symbol)->Message* {
+	const DynamicCommandExceptionType BuiltInExceptions::READER_EXPECTED_SYMBOL = DynamicCommandExceptionType([](const std::string& symbol)->Message* {
 		return new LiteralMessage("Expected '" + symbol + "'");
 		});
 
@@ -193,7 +193,7 @@ namespace brigadier {
 
 	const SimpleCommandExceptionType BuiltInExceptions::DISPATCHER_EXPECTED_ARGUMENT_SEPARATOR = SimpleCommandExceptionType(new LiteralMessage("Expected whitespace to end one argument, but found trailing data"));
 
-	const DynamicCommandExceptionType BuiltInExceptions::DISPATCHER_PARSE_EXCEPTION = DynamicCommandExceptionType([](const string& message)->Message* {
+	const DynamicCommandExceptionType BuiltInExceptions::DISPATCHER_PARSE_EXCEPTION = DynamicCommandExceptionType([](const std::string& message)->Message* {
 		return new LiteralMessage("Could not parse command: " + message);
 		});
 

@@ -6,6 +6,7 @@
 //#include "nbt/JsonToNBT.cpp"
 //#include "brigadier/brigadier.h"
 #include "MCjson.h"
+#include <boost/foreach.hpp>
 
 using std::string;
 using std::cout;
@@ -16,7 +17,14 @@ class Test2;
 class Test3;
 class Test4;
 boost::python::object test();
-string test2();
+void test2();
+template<class T>
+void pure_cout(T s);
+
+int main() {
+	cout << "ok" << endl;
+	return 0;
+}
 
 class Test {
 public:
@@ -55,11 +63,29 @@ public:
 const Test3* Test4::func_class = new Test3([](int input) {cout << "call_int: " << input << endl; });
 
 
-boost::python::object test() {string s;
+boost::python::object test() {
+	string s;
 	JsonToNBT tools(new brigadier::StringReader(""));
+	test2();
 	return tools.simple();
 }
 
-string test2() {
-	return "";
+#define PAGE_SZ (1<<12)
+void test2() {
+	int i;
+	int gb = 1; //以GB为单位分配内存大小
+
+	for (i = 0; i < ((unsigned long)gb << 30) / 1<<12; ++i) {
+		void* m = malloc(PAGE_SZ);
+		if (!m)
+			break;
+		memset(m, 0, 1);
+	}
+	printf("allocated %lu MB\n", ((unsigned long)i * PAGE_SZ) >> 20);
+	getchar();
+}
+
+template<class T>
+void pure_cout(T s) {
+	cout << "[C output] " << s << endl;;
 }
