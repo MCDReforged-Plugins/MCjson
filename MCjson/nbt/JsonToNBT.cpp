@@ -28,6 +28,10 @@ JsonToNBT::JsonToNBT() {};
 
 JsonToNBT::JsonToNBT(StringReader* r) : reader(r) {};
 
+JsonToNBT::~JsonToNBT() {
+	delete this->reader;
+}
+
 boost::python::object JsonToNBT::simple() {
 	boost::python::list l_raw;
 	l_raw.append("1");
@@ -36,4 +40,48 @@ boost::python::object JsonToNBT::simple() {
 	boost::python::dict res;
 	res["data"] = l;
 	return res;
+}
+
+boost::python::dict JsonToNBT::readSingleStruct() {
+	boost::python::dict compoundnbt = this->readStruct();
+	this->reader->skipWhitespace();
+	if (this->reader->canRead()) {
+		throw ERROR_TRAILING_DATA.createWithContext(this->reader);
+	} else {
+		return compoundnbt;
+	}
+}
+
+boost::python::dict JsonToNBT::readStruct() {
+	this->expect('{');
+	boost::python::dict compoundnbt;
+	this->reader->skipWhitespace();
+
+	while (this->reader->canRead() && this->reader->peek() != '}')
+	{
+		int i = this->reader->getCursor();
+		string s = this->readKey();
+		if (s.empty()) {
+			this->reader->setCursor(i);
+			throw ERROR_EXPECTED_KEY.createWithContext(this->reader);
+		}
+
+		this->expect(':');
+		compoundnbt[s] = this->readValue();
+		if (!this->hasElementSeparator()) {
+			break;
+		}
+		
+		if (!this->reader->canRead()) {
+			throw ERROR_EXPECTED_KEY.createWithContext(this->reader);
+		}
+	}
+
+	this->expect('}');
+	return compoundnbt;
+}
+
+void JsonToNBT::expect(char expected) {
+	this->reader->skipWhitespace();
+	this->reader->expect(expected);
 }

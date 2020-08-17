@@ -11,6 +11,13 @@
 class JsonToNBT {
 private:
 	brigadier::StringReader* reader = 0;
+	bool hasElementSeparator();
+protected:
+	string readKey();
+	boost::python::object readTypedValue();
+	boost::python::object type(string stringIn);
+	boost::python::object readValue();
+	boost::python::object readList();
 public:
 	static const brigadier::SimpleCommandExceptionType ERROR_TRAILING_DATA;
 	static const brigadier::SimpleCommandExceptionType ERROR_EXPECTED_KEY;
@@ -29,28 +36,9 @@ public:
 
 	JsonToNBT();
 	JsonToNBT(brigadier::StringReader*);
+	~JsonToNBT();
 	boost::python::object simple();
-};
-
-class INBT {
-public:
-	std::string NBT_TYPES[13] = { "END", "BYTE", "SHORT", "INT", "LONG", "FLOAT", "DOUBLE", "BYTE[]", "STRING", "LIST", "COMPOUND", "INT[]", "LONG[]" };
-	virtual std::string toString() = 0;
-	virtual char getId() = 0;
-	virtual INBT* copy() = 0;
-	std::string getString();
-};
-
-class NBTBuilder {
-public:
-	static INBT* create(char id);
-	static std::string getTypeName(char id);
-};
-
-class EndNBT : public INBT {
-public:
-	std::string toString() override;
-	char getId() override;
-	INBT* copy() override;
-	char hashCode();
+	boost::python::dict readSingleStruct();
+	boost::python::dict readStruct();
+	void expect(char expected);
 };

@@ -18,17 +18,17 @@ namespace brigadier {
 		StringReader();
 		StringReader(const StringReader& outher);
 		StringReader(std::string s);
-		std::string getString();
+		std::string getString() const override;
 		void setCursor(int cursor);
-		int getRemainingLength();
-		int getTotalLength();
-		int getCursor();
-		std::string getRead();
-		std::string getRemaining();
-		bool canRead(int length);
-		bool canRead();
-		char peek();
-		char peek(int offset);
+		int getRemainingLength() const override;
+		int getTotalLength() const override;
+		int getCursor() const override;
+		std::string getRead() const override;
+		std::string getRemaining() const override;
+		bool canRead(int length) const override;
+		bool canRead() const override;
+		char peek() const override;
+		char peek(int offset) const override;
 		char read();
 		void skip();
 		static bool isAllowedNumber(char c);
@@ -63,27 +63,27 @@ namespace brigadier {
 	
 	StringReader::StringReader(std::string s) { this->str = s; }
 
-	std::string StringReader::getString() { return this->str; }
+	std::string StringReader::getString() const { return this->str; }
 
 	void StringReader::setCursor(int cursor) { this->cursor = cursor; }
 
-	int StringReader::getRemainingLength() { return this->str.length() - this->cursor; }
+	int StringReader::getRemainingLength() const { return this->str.length() - this->cursor; }
 
-	int StringReader::getTotalLength() { return this->str.length(); }
+	int StringReader::getTotalLength() const { return this->str.length(); }
 
-	int StringReader::getCursor() { return this->cursor; }
+	int StringReader::getCursor() const { return this->cursor; }
 
-	std::string StringReader::getRead() { return this->str.substr(0, this->cursor); }
+	std::string StringReader::getRead() const { return this->str.substr(0, this->cursor); }
 
-	std::string StringReader::getRemaining() { return this->str.substr(this->cursor); }
+	std::string StringReader::getRemaining() const { return this->str.substr(this->cursor); }
 
-	bool StringReader::canRead(int length) { return this->cursor + length <= this->str.length(); }
+	bool StringReader::canRead(int length) const { return this->cursor + length <= this->str.length(); }
 
-	bool StringReader::canRead() { return this->canRead(1); }
+	bool StringReader::canRead() const { return this->canRead(1); }
 
-	char StringReader::peek() { return this->str.at(this->cursor); }
+	char StringReader::peek() const { return this->str.at(this->cursor); }
 
-	char StringReader::peek(int offset) { return this->str.at(this->cursor + offset); }
+	char StringReader::peek(int offset) const { return this->str.at(this->cursor + offset); }
 
 	char StringReader::read() { return this->str.at(this->cursor++); }
 
