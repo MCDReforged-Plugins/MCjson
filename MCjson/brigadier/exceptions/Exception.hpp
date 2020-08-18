@@ -174,7 +174,7 @@ namespace brigadier {
 			}
 
 			//substring at java: builder.append(this.input.substring(Math.max(0, cursor - 10), cursor));
-			//Java(4, 8)[begin, end] -> C++(4, 4)[begin, length = end - begin + 1]
+			//Java(4, 8)[begin, end] -> C++(4, 5)[begin, length = end - begin + 1]
 			builder.Append(this->input.substr(std::max(0, cursor - CONTEXT_AMOUNT), cursor - std::max(0, cursor - CONTEXT_AMOUNT) + 1));
 			builder.Append("<--[HERE]");
 			return builder.ToString();

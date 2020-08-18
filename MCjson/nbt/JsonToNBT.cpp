@@ -16,13 +16,13 @@ const DynamicCommandExceptionType JsonToNBT::ERROR_INVALID_ARRAY = DynamicComman
 	return new LiteralMessage("Expected literal " + expected);
 	});
 
-const boost::RegEx JsonToNBT::DOUBLE_PATTERN_NOSUFFIX = boost::RegEx("[-+]?(?:[0-9]+[.]|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?");
-const boost::RegEx JsonToNBT::DOUBLE_PATTERN = boost::RegEx("[-+]?(?:[0-9]+[.]?|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?d");
-const boost::RegEx JsonToNBT::FLOAT_PATTERN = boost::RegEx("[-+]?(?:[0-9]+[.]?|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?f");
-const boost::RegEx JsonToNBT::BYTE_PATTERN = boost::RegEx("[-+]?(?:0|[1-9][0-9]*)b");
-const boost::RegEx JsonToNBT::LONG_PATTERN = boost::RegEx("[-+]?(?:0|[1-9][0-9]*)l");
-const boost::RegEx JsonToNBT::SHORT_PATTERN = boost::RegEx("[-+]?(?:0|[1-9][0-9]*)s");
-const boost::RegEx JsonToNBT::INT_PATTERN = boost::RegEx("[-+]?(?:0|[1-9][0-9]*)");
+boost::RegEx JsonToNBT::DOUBLE_PATTERN_NOSUFFIX = boost::RegEx("[-+]?(?:[0-9]+[.]|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?");
+boost::RegEx JsonToNBT::DOUBLE_PATTERN = boost::RegEx("[-+]?(?:[0-9]+[.]?|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?d");
+boost::RegEx JsonToNBT::FLOAT_PATTERN = boost::RegEx("[-+]?(?:[0-9]+[.]?|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?f");
+boost::RegEx JsonToNBT::BYTE_PATTERN = boost::RegEx("[-+]?(?:0|[1-9][0-9]*)b");
+boost::RegEx JsonToNBT::LONG_PATTERN = boost::RegEx("[-+]?(?:0|[1-9][0-9]*)l");
+boost::RegEx JsonToNBT::SHORT_PATTERN = boost::RegEx("[-+]?(?:0|[1-9][0-9]*)s");
+boost::RegEx JsonToNBT::INT_PATTERN = boost::RegEx("[-+]?(?:0|[1-9][0-9]*)");
 
 JsonToNBT::JsonToNBT() {};
 
@@ -32,6 +32,108 @@ JsonToNBT::~JsonToNBT() {
 	delete this->reader;
 }
 
+bool JsonToNBT::hasElementSeparator() {
+	this->reader->skipWhitespace();
+	if (this->reader->canRead() && this->reader->peek() == ',') {
+		this->reader->skip();
+		this->reader->skipWhitespace();
+		return true;
+	} else {
+		return false;
+	}
+}
+
+string JsonToNBT::readKey() {
+	this->reader->skipWhitespace();
+	if (!this->reader->canRead()) {
+		throw ERROR_EXPECTED_KEY.createWithContext(this->reader);
+	} else {
+		return this->reader->readString();
+	}
+}
+
+boost::python::object JsonToNBT::readTypedValue() {
+	this->reader->skipWhitespace();
+	int i = this->reader->getCursor();
+	if (StringReader::isQuotedStringStart(this->reader->peek())) {
+		return boost::python::str(this->reader->readQuotedString());  //StringNBT
+	} else {
+		string s = this->reader->readUnquotedString();
+		if (s.empty()) {
+			this->reader->setCursor(i);
+			throw ERROR_EXPECTED_VALUE.createWithContext(this->reader);
+		} else {
+			return this->type(s);
+		}
+	}
+}
+
+boost::python::object JsonToNBT::type(string stringIn) {
+	try {
+		if (FLOAT_PATTERN.Match(stringIn)) {
+			return boost::python::make_tuple(std::stof(stringIn.substr(0, stringIn.length())))[0];  //FloatNBT
+		}
+		if (BYTE_PATTERN.Match(stringIn)) {
+			return boost::python::str(stringIn.substr(0, stringIn.length()));  //ByteNBT -> Str
+		}
+		if (LONG_PATTERN.Match(stringIn)) {
+			return boost::python::make_tuple(std::stol(stringIn.substr(0, stringIn.length())))[0];  //LongNBT
+		}
+		if (SHORT_PATTERN.Match(stringIn)) {
+			return boost::python::make_tuple(std::stoi(stringIn.substr(0, stringIn.length())))[0];  //ShortNBT -> Int
+		}
+		if (INT_PATTERN.Match(stringIn)) {
+			return boost::python::long_(std::stoi(stringIn));  //IntNBT
+		}
+		if (DOUBLE_PATTERN.Match(stringIn)) {
+			return boost::python::make_tuple(std::stod(stringIn.substr(0, stringIn.length())))[0];  //DoubleNBT
+		}
+		if (DOUBLE_PATTERN_NOSUFFIX.Match(stringIn)) {
+			return boost::python::make_tuple(std::stod(stringIn))[0];  //DoubleNBT
+		}
+		if ("true" == stringIn) {
+			return boost::python::long_(1);  //ByteNBT(bool) -> Int
+		}
+		if ("false" == stringIn) {
+			return boost::python::long_(0);  //ByteNBT(bool) -> Int
+		}
+	} catch (std::invalid_argument) {
+		;
+	}
+
+	return boost::python::str(stringIn);
+}
+
+boost::python::object JsonToNBT::readValue() {
+	this->reader->skipWhitespace();
+	if (!this->reader->canRead()) {
+		throw ERROR_EXPECTED_VALUE.createWithContext(this->reader);
+	} else {
+		char c0 = this->reader->peek();
+		if (c0 == '{') {
+			return this->readStruct();
+		} else {
+			return (c0 == '[') ? this->readList() : this->readTypedValue();
+		}
+	}
+}
+
+boost::python::object JsonToNBT::readList() {
+	return (this->reader->canRead(3) && !StringReader::isQuotedStringStart(this->reader->peek(1)) && this->reader->peek(2) == ';') ? this->readArrayTag() : this->readListTag();
+}
+
+boost::python::object JsonToNBT::readListTag() {
+
+}
+
+boost::python::object JsonToNBT::readArrayTag() {
+
+}
+
+boost::python::object JsonToNBT::readArray(char a, char b) {
+
+}
+
 boost::python::object JsonToNBT::simple() {
 	boost::python::list l_raw;
 	l_raw.append("1");
@@ -39,6 +141,9 @@ boost::python::object JsonToNBT::simple() {
 	boost::python::object l = l_raw;
 	boost::python::dict res;
 	res["data"] = l;
+	res["num"] = boost::python::make_tuple(std::stod("1.555332445"));
+	res["num_cource"] = 1.555332445;
+	res["str_data"] = string("string_data");
 	return res;
 }
 

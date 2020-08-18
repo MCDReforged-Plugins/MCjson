@@ -66,7 +66,7 @@ const Test3* Test4::func_class = new Test3([](int input) {cout << "call_int: " <
 boost::python::object test() {
 	string s;
 	JsonToNBT tools(new brigadier::StringReader(""));
-	test2();
+	//test2();
 	return tools.simple();
 }
 

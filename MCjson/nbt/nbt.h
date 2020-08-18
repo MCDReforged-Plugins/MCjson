@@ -13,11 +13,14 @@ private:
 	brigadier::StringReader* reader = 0;
 	bool hasElementSeparator();
 protected:
-	string readKey();
+	std::string readKey();
 	boost::python::object readTypedValue();
-	boost::python::object type(string stringIn);
+	boost::python::object type(std::string stringIn);
 	boost::python::object readValue();
 	boost::python::object readList();
+	boost::python::object readListTag();
+	boost::python::object readArrayTag();
+	boost::python::object readArray(char a, char b);
 public:
 	static const brigadier::SimpleCommandExceptionType ERROR_TRAILING_DATA;
 	static const brigadier::SimpleCommandExceptionType ERROR_EXPECTED_KEY;
@@ -26,13 +29,13 @@ public:
 	static const brigadier::Dynamic2CommandExceptionType ERROR_INSERT_MIXED_ARRAY;
 	static const brigadier::DynamicCommandExceptionType ERROR_INVALID_ARRAY;
 
-	static const boost::RegEx DOUBLE_PATTERN_NOSUFFIX;
-	static const boost::RegEx DOUBLE_PATTERN;
-	static const boost::RegEx FLOAT_PATTERN;
-	static const boost::RegEx BYTE_PATTERN;
-	static const boost::RegEx LONG_PATTERN;
-	static const boost::RegEx SHORT_PATTERN;
-	static const boost::RegEx INT_PATTERN;
+	static boost::RegEx DOUBLE_PATTERN_NOSUFFIX;
+	static boost::RegEx DOUBLE_PATTERN;
+	static boost::RegEx FLOAT_PATTERN;
+	static boost::RegEx BYTE_PATTERN;
+	static boost::RegEx LONG_PATTERN;
+	static boost::RegEx SHORT_PATTERN;
+	static boost::RegEx INT_PATTERN;
 
 	JsonToNBT();
 	JsonToNBT(brigadier::StringReader*);
