@@ -9,6 +9,7 @@ namespace brigadier {
 	public:
 		virtual std::string getString() const = 0;
 		virtual Message* clone() const = 0; //return new obj
+		virtual ~Message();
 	};
 
 	class LiteralMessage : public Message {
@@ -23,6 +24,8 @@ namespace brigadier {
 
 #ifdef brigadier_IMPLEMENTS
 
+	Message::~Message() {}
+	
 	LiteralMessage::LiteralMessage(const std::string& s) { this->str = s; }
 
 	Message* LiteralMessage::clone() const {

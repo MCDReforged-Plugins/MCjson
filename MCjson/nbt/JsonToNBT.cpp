@@ -123,15 +123,32 @@ boost::python::object JsonToNBT::readList() {
 }
 
 boost::python::object JsonToNBT::readListTag() {
+	this->expect('[');
+	this->reader->skipWhitespace();
+	if (!this->reader->canRead()) {
+		throw ERROR_EXPECTED_VALUE.createWithContext(this->reader);
+	} else {
+		boost::python::list listnbt;
+		int i = -1;
 
+		while (this->reader->peek() != ']') {
+			int j = this->reader->getCursor();
+			boost::python::object inbt = this->readValue();
+			//Still at here
+			
+		}
+
+		this->expect(']');
+		return listnbt;
+	}
 }
 
 boost::python::object JsonToNBT::readArrayTag() {
-
+	return boost::python::object();
 }
 
 boost::python::object JsonToNBT::readArray(char a, char b) {
-
+	return boost::python::object();
 }
 
 boost::python::object JsonToNBT::simple() {

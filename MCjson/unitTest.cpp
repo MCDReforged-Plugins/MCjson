@@ -12,6 +12,7 @@ using std::string;
 using std::cout;
 using std::endl;
 
+class str;
 class Test;
 class Test2;
 class Test3;
@@ -21,16 +22,19 @@ void test2();
 template<class T>
 void pure_cout(T s);
 
-int main() {
-	cout << "ok" << endl;
-	return 0;
-}
+class str {
+private:
+	string s;
+public:
+	str(string s): s(s) {}
+	void show() { cout << this->s << endl; }
+};
 
 class Test {
 public:
-	virtual const void show() = 0;
+	virtual const void show() {};
 	virtual ~Test() {};
-	virtual Test* clone() = 0;
+	virtual Test* clone() { return 0; };
 };
 
 class Test2 : public Test {
@@ -64,28 +68,41 @@ const Test3* Test4::func_class = new Test3([](int input) {cout << "call_int: " <
 
 
 boost::python::object test() {
-	string s;
-	JsonToNBT tools(new brigadier::StringReader(""));
-	//test2();
-	return tools.simple();
+	Test t1;
+	Test2 t2(1);
+	Test t3 = Test2(2);
+	t1.show();
+	t2.show();
+	t3.show();
+	return boost::python::dict();
 }
 
-#define PAGE_SZ (1<<12)
 void test2() {
-	int i;
-	int gb = 1; //以GB为单位分配内存大小
-
-	for (i = 0; i < ((unsigned long)gb << 30) / 1<<12; ++i) {
-		void* m = malloc(PAGE_SZ);
-		if (!m)
-			break;
-		memset(m, 0, 1);
+	for (int count = 1; count <= 10000; count++) {
+		brigadier::StringReader* reader = new brigadier::StringReader("xxx");
+		reader->setCursor(2);
+		try {
+			brigadier::LiteralMessage* message = new brigadier::LiteralMessage("ERROR_TRAILING_DATA");
+			brigadier::SimpleCommandExceptionType exception_type(message);
+			brigadier::CommandSyntaxException exception = exception_type.createWithContext(reader);
+			throw exception;
+		}
+		catch (brigadier::Exception& e) {
+			cout << e.getMessage() << endl;
+		}
+		delete(reader);
 	}
-	printf("allocated %lu MB\n", ((unsigned long)i * PAGE_SZ) >> 20);
-	getchar();
 }
 
 template<class T>
 void pure_cout(T s) {
 	cout << "[C output] " << s << endl;;
+}
+
+int main() {
+
+	test2();
+
+	cout << "ok" << endl;
+	return 0;
 }

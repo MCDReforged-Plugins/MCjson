@@ -8,6 +8,9 @@
 
 #include "../brigadier/brigadier.h"
 
+class INBT {
+};
+
 class JsonToNBT {
 private:
 	brigadier::StringReader* reader = 0;
