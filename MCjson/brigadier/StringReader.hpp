@@ -109,7 +109,7 @@ namespace brigadier {
 
 		std::string number = this->str.substr(start, this->cursor - start + 1);
 		if (number.empty()) {
-			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedInt().createWithContext(this);
+			throw CommandSyntaxException::BUILT_IN_EXCEPTIONS->readerExpectedInt().createWithContext(this);
 		} 
 		else {
 			try {
@@ -117,7 +117,7 @@ namespace brigadier {
 			}
 			catch (std::invalid_argument) {
 				this->cursor = start;
-				throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerInvalidInt().createWithContext(this, number);
+				throw CommandSyntaxException::BUILT_IN_EXCEPTIONS->readerInvalidInt().createWithContext(this, number);
 			}
 		}
 	}
@@ -131,7 +131,7 @@ namespace brigadier {
 
 		std::string number = this->str.substr(start, this->cursor - start + 1);
 		if (number.empty()) {
-			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedLong().createWithContext(this);
+			throw CommandSyntaxException::BUILT_IN_EXCEPTIONS->readerExpectedLong().createWithContext(this);
 		}
 		else {
 			try {
@@ -139,7 +139,7 @@ namespace brigadier {
 			}
 			catch (std::invalid_argument) {
 				this->cursor = start;
-				throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerInvalidLong().createWithContext(this, number);
+				throw CommandSyntaxException::BUILT_IN_EXCEPTIONS->readerInvalidLong().createWithContext(this, number);
 			}
 		}
 	}
@@ -153,7 +153,7 @@ namespace brigadier {
 
 		std::string number = this->str.substr(start, this->cursor - start + 1);
 		if (number.empty()) {
-			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedDouble().createWithContext(this);
+			throw CommandSyntaxException::BUILT_IN_EXCEPTIONS->readerExpectedDouble().createWithContext(this);
 		}
 		else {
 			try {
@@ -161,7 +161,7 @@ namespace brigadier {
 			}
 			catch (std::invalid_argument) {
 				this->cursor = start;
-				throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerInvalidDouble().createWithContext(this, number);
+				throw CommandSyntaxException::BUILT_IN_EXCEPTIONS->readerInvalidDouble().createWithContext(this, number);
 			}
 		}
 	}
@@ -175,7 +175,7 @@ namespace brigadier {
 
 		std::string number = this->str.substr(start, this->cursor - start + 1);
 		if (number.empty()) {
-			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedFloat().createWithContext(this);
+			throw CommandSyntaxException::BUILT_IN_EXCEPTIONS->readerExpectedFloat().createWithContext(this);
 		}
 		else {
 			try {
@@ -183,7 +183,7 @@ namespace brigadier {
 			}
 			catch (std::invalid_argument) {
 				this->cursor = start;
-				throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerInvalidFloat().createWithContext(this, number);
+				throw CommandSyntaxException::BUILT_IN_EXCEPTIONS->readerInvalidFloat().createWithContext(this, number);
 			}
 		}
 	}
@@ -210,7 +210,7 @@ namespace brigadier {
 		} else {
 			const char next = this->peek();
 			if (!isQuotedStringStart(next)) {
-				throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedStartOfQuote().createWithContext(this);
+				throw CommandSyntaxException::BUILT_IN_EXCEPTIONS->readerExpectedStartOfQuote().createWithContext(this);
 			}
 			this->skip();
 			return this->readStringUntil(next);
@@ -228,7 +228,7 @@ namespace brigadier {
 					escaped = false;
 				} else {
 					this->setCursor(this->getCursor() - 1);
-					throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerInvalidEscape().createWithContext(this, std::string({ c,0 }));
+					throw CommandSyntaxException::BUILT_IN_EXCEPTIONS->readerInvalidEscape().createWithContext(this, std::string({ c,0 }));
 				}
 			} else if (c == SYNTAX_ESCAPE) {
 				escaped = true;
@@ -239,7 +239,7 @@ namespace brigadier {
 ;			}
 		}
 		
-		throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedEndOfQuote().createWithContext(this);
+		throw CommandSyntaxException::BUILT_IN_EXCEPTIONS->readerExpectedEndOfQuote().createWithContext(this);
 	}
 
 	std::string StringReader::readString() {
@@ -258,7 +258,7 @@ namespace brigadier {
 		const int start = this->cursor;
 		const std::string value = this->readString();
 		if (value.empty()) {
-			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedBool().createWithContext(this);
+			throw CommandSyntaxException::BUILT_IN_EXCEPTIONS->readerExpectedBool().createWithContext(this);
 		}
 
 		if (value.compare("true")) {
@@ -267,13 +267,13 @@ namespace brigadier {
 			return false;
 		} else {
 			this->cursor = start;
-			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerInvalidBool().createWithContext(this, value);
+			throw CommandSyntaxException::BUILT_IN_EXCEPTIONS->readerInvalidBool().createWithContext(this, value);
 		}
 	}
 
 	void StringReader::expect(char c) {
 		if (!this->canRead() || this->peek() != c) {
-			throw const_cast<BuiltInExceptionProvider*>(CommandSyntaxException::BUILT_IN_EXCEPTIONS)->readerExpectedSymbol().createWithContext(this, std::string({ c,0 }));
+			throw CommandSyntaxException::BUILT_IN_EXCEPTIONS->readerExpectedSymbol().createWithContext(this, std::string({ c,0 }));
 		}
 	}
 

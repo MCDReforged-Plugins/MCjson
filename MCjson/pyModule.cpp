@@ -3,7 +3,7 @@
 #include <boost/python.hpp>
 #include<iostream>
 
-boost::python::object test();
+boost::python::object test(boost::python::str);
 
 BOOST_PYTHON_MODULE(MCjson) {
 	using namespace boost::python;

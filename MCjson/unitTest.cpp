@@ -67,14 +67,18 @@ public:
 const Test3* Test4::func_class = new Test3([](int input) {cout << "call_int: " << input << endl; });
 
 
-boost::python::object test() {
-	Test t1;
-	Test2 t2(1);
-	Test t3 = Test2(2);
-	t1.show();
-	t2.show();
-	t3.show();
-	return boost::python::dict();
+boost::python::object test(boost::python::str s) {
+	brigadier::StringReader* reader = new brigadier::StringReader(string(boost::python::extract<char*>(s)));
+	cout << reader->peek() << endl;
+	JsonToNBT tools(reader);
+	try {
+		boost::python::dict result = tools.readStruct();
+		return result;
+	}
+	catch (brigadier::Exception& e) {
+		cout << "[" << e.getTypeString() << "] " << e.getMessage() << endl;
+	}
+	return boost::python::object();
 }
 
 void test2() {
@@ -101,7 +105,14 @@ void pure_cout(T s) {
 
 int main() {
 
-	test2();
+	string s("{\"key\":\"reeeeee\"}");
+	/*
+	brigadier::StringReader reader("{\"key\":\"reeeeee\"}");
+	cout << reader.peek() << endl;
+	*/
+	boost::python::str py_str = s.c_str();
+	boost::python::object result = test(py_str);
+	
 
 	cout << "ok" << endl;
 	return 0;

@@ -42,8 +42,8 @@ namespace brigadier {
 		CommandSyntaxException(const CommandSyntaxException& outher);
 		~CommandSyntaxException() override;
 		const Message* getRawMessage() const override;
-		std::string getInput();
-		const int getCursor();
+		std::string getInput() const;
+		int getCursor() const;
 		const CommandExceptionType* getType();
 		std::string getContext() const;
 		std::string getMessage() const override;
@@ -57,11 +57,11 @@ namespace brigadier {
 		SimpleCommandExceptionType(const Message* message);
 		SimpleCommandExceptionType(const SimpleCommandExceptionType& outher);
 		~SimpleCommandExceptionType() override;
-		std::string getTypeString();
+		std::string getTypeString() const;
 		CommandExceptionType* clone() const override;
-		CommandSyntaxException create();
+		CommandSyntaxException create() const;
 		CommandSyntaxException createWithContext(const ImmutableStringReader* reader) const;
-		std::string toString();
+		std::string toString() const;
 	};
 
 	namespace ExceptionFunction {
@@ -98,8 +98,8 @@ namespace brigadier {
 	public:
 		DynamicCommandExceptionType(const ExceptionFunction::DynamicCommandFunction& function);
 		CommandExceptionType* clone() const override;
-		CommandSyntaxException create(const std::string& arg);
-		CommandSyntaxException createWithContext(const ImmutableStringReader* reader, const std::string& arg);
+		CommandSyntaxException create(const std::string& arg) const;
+		CommandSyntaxException createWithContext(const ImmutableStringReader* reader, const std::string& arg) const;
 	};
 
 	class Dynamic2CommandExceptionType : public CommandExceptionType {
@@ -108,8 +108,8 @@ namespace brigadier {
 	public:
 		Dynamic2CommandExceptionType(const ExceptionFunction::Dynamic2CommandFunction function);
 		CommandExceptionType* clone() const override;
-		CommandSyntaxException create(const std::string& a, const std::string& b);
-		CommandSyntaxException createWithContext(const ImmutableStringReader* reader, const std::string& a, const std::string& b);
+		CommandSyntaxException create(const std::string& a, const std::string& b) const;
+		CommandSyntaxException createWithContext(const ImmutableStringReader* reader, const std::string& a, const std::string& b) const;
 	};
 
 	class Dynamic3CommandExceptionType : public CommandExceptionType {
@@ -118,8 +118,8 @@ namespace brigadier {
 	public:
 		Dynamic3CommandExceptionType(ExceptionFunction::Dynamic3CommandFunction function);
 		CommandExceptionType* clone() const override;
-		CommandSyntaxException create(const std::string& a, const std::string& b, const std::string& c);
-		CommandSyntaxException createWithContext(const ImmutableStringReader* reader, const std::string& a, const std::string& b, const std::string& c);
+		CommandSyntaxException create(const std::string& a, const std::string& b, const std::string& c) const;
+		CommandSyntaxException createWithContext(const ImmutableStringReader* reader, const std::string& a, const std::string& b, const std::string& c) const;
 	};
 
 	class Dynamic4CommandExceptionType : public CommandExceptionType {
@@ -128,8 +128,8 @@ namespace brigadier {
 	public:
 		Dynamic4CommandExceptionType(ExceptionFunction::Dynamic4CommandFunction function);
 		CommandExceptionType* clone() const override;
-		CommandSyntaxException create(const std::string& a, const std::string& b, const std::string& c, const std::string& d);
-		CommandSyntaxException createWithContext(const ImmutableStringReader* reader, const std::string& a, const std::string& b, const std::string& c, const std::string& d);
+		CommandSyntaxException create(const std::string& a, const std::string& b, const std::string& c, const std::string& d) const;
+		CommandSyntaxException createWithContext(const ImmutableStringReader* reader, const std::string& a, const std::string& b, const std::string& c, const std::string& d) const;
 	};
 }
 
@@ -159,9 +159,9 @@ namespace brigadier {
 
 	const Message* CommandSyntaxException::getRawMessage() const { return this->message; }
 
-	std::string CommandSyntaxException::getInput() { return this->input; }
+	std::string CommandSyntaxException::getInput() const { return this->input; }
 
-	 const int CommandSyntaxException::getCursor() { return this->cursor; }
+	int CommandSyntaxException::getCursor() const { return this->cursor; }
 
 	const CommandExceptionType* CommandSyntaxException::getType() { return this->type; }
 
@@ -176,7 +176,7 @@ namespace brigadier {
 			//substring at java: builder.append(this.input.substring(Math.max(0, cursor - 10), cursor));
 			//Java(4, 8)[begin, end] -> C++(4, 5)[begin, length = end - begin + 1]
 			builder.Append(this->input.substr(std::max(0, cursor - CONTEXT_AMOUNT), cursor - std::max(0, cursor - CONTEXT_AMOUNT) + 1));
-			builder.Append("<--[HERE]");
+			builder.Append(" <--[HERE]");
 			return builder.ToString();
 		} else {
 			return std::string();
@@ -203,27 +203,27 @@ namespace brigadier {
 
 	SimpleCommandExceptionType::~SimpleCommandExceptionType() { delete this->message; }
 
-	std::string SimpleCommandExceptionType::getTypeString() { return std::string("SimpleCommandExceptionType"); }
+	std::string SimpleCommandExceptionType::getTypeString() const { return std::string("SimpleCommandExceptionType"); }
 
 	CommandExceptionType* SimpleCommandExceptionType::clone() const { return new SimpleCommandExceptionType(*this); }
 
-	CommandSyntaxException SimpleCommandExceptionType::create() { return CommandSyntaxException(this->clone(), this->message->clone()); }
+	CommandSyntaxException SimpleCommandExceptionType::create() const { return CommandSyntaxException(this->clone(), this->message->clone()); }
 
 	CommandSyntaxException SimpleCommandExceptionType::createWithContext(const ImmutableStringReader* reader) const {
 		return CommandSyntaxException(this->clone(), this->message->clone(), reader->getString(), reader->getCursor());
 	}
 
-	std::string SimpleCommandExceptionType::toString() { return this->message->getString(); }
+	std::string SimpleCommandExceptionType::toString() const { return this->message->getString(); }
 
 	DynamicCommandExceptionType::DynamicCommandExceptionType(const ExceptionFunction::DynamicCommandFunction& function) { this->function = function; };
 
 	CommandExceptionType* DynamicCommandExceptionType::clone() const { return new DynamicCommandExceptionType(*this); }
 
-	CommandSyntaxException DynamicCommandExceptionType::create(const std::string& arg) {
+	CommandSyntaxException DynamicCommandExceptionType::create(const std::string& arg) const {
 		return CommandSyntaxException(this->clone(), this->function(arg));
 	}
 
-	CommandSyntaxException DynamicCommandExceptionType::createWithContext(const ImmutableStringReader* reader, const std::string& arg) {
+	CommandSyntaxException DynamicCommandExceptionType::createWithContext(const ImmutableStringReader* reader, const std::string& arg) const {
 		return CommandSyntaxException(new DynamicCommandExceptionType(*this), this->function(arg), reader->getString(), reader->getCursor());
 	}
 
@@ -231,11 +231,11 @@ namespace brigadier {
 
 	CommandExceptionType* Dynamic2CommandExceptionType::clone() const { return new Dynamic2CommandExceptionType(*this); }
 
-	CommandSyntaxException Dynamic2CommandExceptionType::create(const std::string& a, const std::string& b) {
+	CommandSyntaxException Dynamic2CommandExceptionType::create(const std::string& a, const std::string& b) const {
 		return CommandSyntaxException(this->clone(), this->function(a, b));
 	}
 
-	CommandSyntaxException Dynamic2CommandExceptionType::createWithContext(const ImmutableStringReader* reader, const std::string& a, const std::string& b) {
+	CommandSyntaxException Dynamic2CommandExceptionType::createWithContext(const ImmutableStringReader* reader, const std::string& a, const std::string& b) const {
 		return CommandSyntaxException(new Dynamic2CommandExceptionType(*this), this->function(a, b), reader->getString(), reader->getCursor());
 	}
 
@@ -243,11 +243,11 @@ namespace brigadier {
 
 	CommandExceptionType* Dynamic3CommandExceptionType::clone() const { return new Dynamic3CommandExceptionType(*this); }
 
-	CommandSyntaxException Dynamic3CommandExceptionType::create(const std::string& a, const std::string& b, const std::string& c) {
+	CommandSyntaxException Dynamic3CommandExceptionType::create(const std::string& a, const std::string& b, const std::string& c) const {
 		return CommandSyntaxException(this->clone(), this->function(a, b, c));
 	}
 
-	 CommandSyntaxException Dynamic3CommandExceptionType::createWithContext(const ImmutableStringReader* reader, const std::string& a, const std::string& b, const std::string& c) {
+	 CommandSyntaxException Dynamic3CommandExceptionType::createWithContext(const ImmutableStringReader* reader, const std::string& a, const std::string& b, const std::string& c) const {
 		return CommandSyntaxException(new Dynamic3CommandExceptionType(*this), this->function(a, b, c), reader->getString(), reader->getCursor());
 	}
 
@@ -255,11 +255,11 @@ namespace brigadier {
 
 	CommandExceptionType* Dynamic4CommandExceptionType::clone() const { return new Dynamic4CommandExceptionType(*this); }
 
-	CommandSyntaxException Dynamic4CommandExceptionType::create(const std::string& a, const std::string& b, const std::string& c, const std::string& d) {
+	CommandSyntaxException Dynamic4CommandExceptionType::create(const std::string& a, const std::string& b, const std::string& c, const std::string& d) const {
 		return CommandSyntaxException(this->clone(), this->function(a, b, c, d));
 	}
 
-	CommandSyntaxException Dynamic4CommandExceptionType::createWithContext(const ImmutableStringReader* reader, const std::string& a, const std::string& b, const std::string& c, const std::string& d) {
+	CommandSyntaxException Dynamic4CommandExceptionType::createWithContext(const ImmutableStringReader* reader, const std::string& a, const std::string& b, const std::string& c, const std::string& d) const {
 		return CommandSyntaxException(new Dynamic4CommandExceptionType(*this), this->function(a, b, c, d), reader->getString(), reader->getCursor());
 	}
 }

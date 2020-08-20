@@ -134,7 +134,16 @@ boost::python::object JsonToNBT::readListTag() {
 		while (this->reader->peek() != ']') {
 			int j = this->reader->getCursor();
 			boost::python::object inbt = this->readValue();
-			//Still at here
+			//Python list support MIXED list, not need to check
+
+			listnbt.append(inbt);
+			if (!this->hasElementSeparator()) {
+				break;
+			}
+
+			if (!this->reader->canRead()) {
+				throw ERROR_EXPECTED_VALUE.createWithContext(this->reader);
+			}
 			
 		}
 
@@ -144,24 +153,48 @@ boost::python::object JsonToNBT::readListTag() {
 }
 
 boost::python::object JsonToNBT::readArrayTag() {
-	return boost::python::object();
+	this->expect('[');
+	int i = this->reader->getCursor();
+	char c0 = this->reader->read();
+	this->reader->read();
+	this->reader->skipWhitespace();
+	if (!this->reader->canRead()) {
+		throw ERROR_EXPECTED_VALUE.createWithContext(this->reader);
+	} else if (c0 == 'B') {
+		return this->readArray(7, 1);
+	} else if (c0 == 'L') {
+		return this->readArray(12, 4);
+	} else if (c0 == 'I') {
+		return this->readArray(11, 3);
+	} else {
+		this->reader->setCursor(i);
+		throw ERROR_INVALID_ARRAY.createWithContext(this->reader, {c0, 0});
+	}
 }
 
-boost::python::object JsonToNBT::readArray(char a, char b) {
-	return boost::python::object();
-}
+boost::python::object JsonToNBT::readArray(short a, short type) {
+	boost::python::list list;
 
-boost::python::object JsonToNBT::simple() {
-	boost::python::list l_raw;
-	l_raw.append("1");
-	l_raw.append("2");
-	boost::python::object l = l_raw;
-	boost::python::dict res;
-	res["data"] = l;
-	res["num"] = boost::python::make_tuple(std::stod("1.555332445"));
-	res["num_cource"] = 1.555332445;
-	res["str_data"] = string("string_data");
-	return res;
+	while (true) {
+		if (this->reader->peek() != ']') {
+			int i = this->reader->getCursor();
+			boost::python::object inbt = this->readValue();
+			//Python list support MIXED list, not need to check
+
+			//Not converted: Byte | Long | Int
+			list.append(inbt);
+
+			if (this->hasElementSeparator()) {
+				if (!this->reader->canRead()) {
+					throw ERROR_EXPECTED_VALUE.createWithContext(this->reader);
+				}
+				continue;
+			}
+		}
+
+		this->expect(']');
+		return list;
+	}
 }
 
 boost::python::dict JsonToNBT::readSingleStruct() {

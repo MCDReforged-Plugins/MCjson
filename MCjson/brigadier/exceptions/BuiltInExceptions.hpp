@@ -7,33 +7,33 @@ namespace brigadier {
 	
 	class BuiltInExceptionProvider {
 	public:
-		virtual Dynamic2CommandExceptionType doubleTooLow() = 0;
-		virtual Dynamic2CommandExceptionType doubleTooHigh() = 0;
-		virtual Dynamic2CommandExceptionType floatTooLow() = 0;
-		virtual Dynamic2CommandExceptionType floatTooHigh() = 0;
-		virtual Dynamic2CommandExceptionType integerTooLow() = 0;
-		virtual Dynamic2CommandExceptionType integerTooHigh() = 0;
-		virtual Dynamic2CommandExceptionType longTooLow() = 0;
-		virtual Dynamic2CommandExceptionType longTooHigh() = 0;
-		virtual DynamicCommandExceptionType literalIncorrect() = 0;
-		virtual SimpleCommandExceptionType readerExpectedStartOfQuote() = 0;
-		virtual SimpleCommandExceptionType readerExpectedEndOfQuote() = 0;
-		virtual DynamicCommandExceptionType readerInvalidEscape() = 0;
-		virtual DynamicCommandExceptionType readerInvalidBool() = 0;
-		virtual DynamicCommandExceptionType readerInvalidInt() = 0;
-		virtual SimpleCommandExceptionType readerExpectedInt() = 0;
-		virtual DynamicCommandExceptionType readerInvalidLong() = 0;
-		virtual SimpleCommandExceptionType readerExpectedLong() = 0;
-		virtual DynamicCommandExceptionType readerInvalidDouble() = 0;
-		virtual SimpleCommandExceptionType readerExpectedDouble() = 0;
-		virtual DynamicCommandExceptionType readerInvalidFloat() = 0;
-		virtual SimpleCommandExceptionType readerExpectedFloat() = 0;
-		virtual SimpleCommandExceptionType readerExpectedBool() = 0;
-		virtual DynamicCommandExceptionType readerExpectedSymbol() = 0;
-		virtual SimpleCommandExceptionType dispatcherUnknownCommand() = 0;
-		virtual SimpleCommandExceptionType dispatcherUnknownArgument() = 0;
-		virtual SimpleCommandExceptionType dispatcherExpectedArgumentSeparator() = 0;
-		virtual DynamicCommandExceptionType dispatcherParseException() = 0;
+		virtual Dynamic2CommandExceptionType doubleTooLow() const = 0;
+		virtual Dynamic2CommandExceptionType doubleTooHigh() const = 0;
+		virtual Dynamic2CommandExceptionType floatTooLow() const = 0;
+		virtual Dynamic2CommandExceptionType floatTooHigh() const = 0;
+		virtual Dynamic2CommandExceptionType integerTooLow() const = 0;
+		virtual Dynamic2CommandExceptionType integerTooHigh() const = 0;
+		virtual Dynamic2CommandExceptionType longTooLow() const = 0;
+		virtual Dynamic2CommandExceptionType longTooHigh() const = 0;
+		virtual DynamicCommandExceptionType literalIncorrect() const = 0;
+		virtual SimpleCommandExceptionType readerExpectedStartOfQuote() const = 0;
+		virtual SimpleCommandExceptionType readerExpectedEndOfQuote() const = 0;
+		virtual DynamicCommandExceptionType readerInvalidEscape() const = 0;
+		virtual DynamicCommandExceptionType readerInvalidBool() const = 0;
+		virtual DynamicCommandExceptionType readerInvalidInt() const = 0;
+		virtual SimpleCommandExceptionType readerExpectedInt() const = 0;
+		virtual DynamicCommandExceptionType readerInvalidLong() const = 0;
+		virtual SimpleCommandExceptionType readerExpectedLong() const = 0;
+		virtual DynamicCommandExceptionType readerInvalidDouble() const = 0;
+		virtual SimpleCommandExceptionType readerExpectedDouble() const = 0;
+		virtual DynamicCommandExceptionType readerInvalidFloat() const = 0;
+		virtual SimpleCommandExceptionType readerExpectedFloat() const = 0;
+		virtual SimpleCommandExceptionType readerExpectedBool() const = 0;
+		virtual DynamicCommandExceptionType readerExpectedSymbol() const = 0;
+		virtual SimpleCommandExceptionType dispatcherUnknownCommand() const = 0;
+		virtual SimpleCommandExceptionType dispatcherUnknownArgument() const = 0;
+		virtual SimpleCommandExceptionType dispatcherExpectedArgumentSeparator() const = 0;
+		virtual DynamicCommandExceptionType dispatcherParseException() const = 0;
 	};
 
 	class BuiltInExceptions : public BuiltInExceptionProvider {
@@ -78,33 +78,33 @@ namespace brigadier {
 		static const SimpleCommandExceptionType DISPATCHER_EXPECTED_ARGUMENT_SEPARATOR;
 		static const DynamicCommandExceptionType DISPATCHER_PARSE_EXCEPTION;
 	public:
-		Dynamic2CommandExceptionType doubleTooLow() override { return DOUBLE_TOO_SMALL; }
-		Dynamic2CommandExceptionType doubleTooHigh() override { return DOUBLE_TOO_BIG; }
-		Dynamic2CommandExceptionType floatTooLow() override { return FLOAT_TOO_SMALL; }
-		Dynamic2CommandExceptionType floatTooHigh() override { return FLOAT_TOO_BIG; }
-		Dynamic2CommandExceptionType integerTooLow() override { return INTEGER_TOO_SMALL; }
-		Dynamic2CommandExceptionType integerTooHigh() override { return INTEGER_TOO_BIG; }
-		Dynamic2CommandExceptionType longTooLow() override { return LONG_TOO_SMALL; }
-		Dynamic2CommandExceptionType longTooHigh() override { return LONG_TOO_BIG; }
-		DynamicCommandExceptionType literalIncorrect() override { return LITERAL_INCORRECT; }
-		SimpleCommandExceptionType readerExpectedStartOfQuote() override { return READER_EXPECTED_START_OF_QUOTE; }
-		SimpleCommandExceptionType readerExpectedEndOfQuote() override { return READER_EXPECTED_END_OF_QUOTE; }
-		DynamicCommandExceptionType readerInvalidEscape() override { return READER_INVALID_ESCAPE; }
-		DynamicCommandExceptionType readerInvalidBool() override { return READER_INVALID_BOOL; }
-		DynamicCommandExceptionType readerInvalidInt() override { return READER_INVALID_INT; }
-		SimpleCommandExceptionType readerExpectedInt() override { return READER_EXPECTED_INT; }
-		DynamicCommandExceptionType readerInvalidLong() override { return READER_INVALID_LONG; }
-		SimpleCommandExceptionType readerExpectedLong() override { return READER_EXPECTED_LONG; }
-		DynamicCommandExceptionType readerInvalidDouble() override { return READER_INVALID_DOUBLE; }
-		SimpleCommandExceptionType readerExpectedDouble() override { return READER_EXPECTED_DOUBLE; }
-		DynamicCommandExceptionType readerInvalidFloat() override { return READER_INVALID_FLOAT; }
-		SimpleCommandExceptionType readerExpectedFloat() override { return READER_EXPECTED_FLOAT; }
-		SimpleCommandExceptionType readerExpectedBool() override { return READER_EXPECTED_BOOL; }
-		DynamicCommandExceptionType readerExpectedSymbol() override { return READER_EXPECTED_SYMBOL; }
-		SimpleCommandExceptionType dispatcherUnknownCommand() override { return DISPATCHER_UNKNOWN_COMMAND; }
-		SimpleCommandExceptionType dispatcherUnknownArgument() override { return DISPATCHER_UNKNOWN_ARGUMENT; }
-		SimpleCommandExceptionType dispatcherExpectedArgumentSeparator() override { return DISPATCHER_EXPECTED_ARGUMENT_SEPARATOR; }
-		DynamicCommandExceptionType dispatcherParseException() override { return DISPATCHER_PARSE_EXCEPTION; }
+		Dynamic2CommandExceptionType doubleTooLow() const override;
+		Dynamic2CommandExceptionType doubleTooHigh() const override;
+		Dynamic2CommandExceptionType floatTooLow() const override;
+		Dynamic2CommandExceptionType floatTooHigh() const override;
+		Dynamic2CommandExceptionType integerTooLow() const override;
+		Dynamic2CommandExceptionType integerTooHigh() const override;
+		Dynamic2CommandExceptionType longTooLow() const override;
+		Dynamic2CommandExceptionType longTooHigh() const override;
+		DynamicCommandExceptionType literalIncorrect() const override;
+		SimpleCommandExceptionType readerExpectedStartOfQuote() const override;
+		SimpleCommandExceptionType readerExpectedEndOfQuote() const override;
+		DynamicCommandExceptionType readerInvalidEscape() const override;
+		DynamicCommandExceptionType readerInvalidBool() const override;
+		DynamicCommandExceptionType readerInvalidInt() const override;
+		SimpleCommandExceptionType readerExpectedInt() const override;
+		DynamicCommandExceptionType readerInvalidLong() const override;
+		SimpleCommandExceptionType readerExpectedLong() const override;
+		DynamicCommandExceptionType readerInvalidDouble() const override;
+		SimpleCommandExceptionType readerExpectedDouble() const override;
+		DynamicCommandExceptionType readerInvalidFloat() const override;
+		SimpleCommandExceptionType readerExpectedFloat() const override;
+		SimpleCommandExceptionType readerExpectedBool() const override;
+		DynamicCommandExceptionType readerExpectedSymbol() const override;
+		SimpleCommandExceptionType dispatcherUnknownCommand() const override;
+		SimpleCommandExceptionType dispatcherUnknownArgument() const override;
+		SimpleCommandExceptionType dispatcherExpectedArgumentSeparator() const override;
+		DynamicCommandExceptionType dispatcherParseException() const override;
 	};
 
 #ifdef brigadier_IMPLEMENTS
@@ -196,6 +196,35 @@ namespace brigadier {
 	const DynamicCommandExceptionType BuiltInExceptions::DISPATCHER_PARSE_EXCEPTION = DynamicCommandExceptionType([](const std::string& message)->Message* {
 		return new LiteralMessage("Could not parse command: " + message);
 		});
+
+
+	Dynamic2CommandExceptionType BuiltInExceptions::doubleTooLow() const { return DOUBLE_TOO_SMALL; }
+	Dynamic2CommandExceptionType BuiltInExceptions::doubleTooHigh() const { return DOUBLE_TOO_BIG; }
+	Dynamic2CommandExceptionType BuiltInExceptions::floatTooLow() const { return FLOAT_TOO_SMALL; }
+	Dynamic2CommandExceptionType BuiltInExceptions::floatTooHigh() const { return FLOAT_TOO_BIG; }
+	Dynamic2CommandExceptionType BuiltInExceptions::integerTooLow() const { return INTEGER_TOO_SMALL; }
+	Dynamic2CommandExceptionType BuiltInExceptions::integerTooHigh() const { return INTEGER_TOO_BIG; }
+	Dynamic2CommandExceptionType BuiltInExceptions::longTooLow() const { return LONG_TOO_SMALL; }
+	Dynamic2CommandExceptionType BuiltInExceptions::longTooHigh() const { return LONG_TOO_BIG; }
+	DynamicCommandExceptionType BuiltInExceptions::literalIncorrect() const { return LITERAL_INCORRECT; }
+	SimpleCommandExceptionType BuiltInExceptions::readerExpectedStartOfQuote() const { return READER_EXPECTED_START_OF_QUOTE; }
+	SimpleCommandExceptionType BuiltInExceptions::readerExpectedEndOfQuote() const { return READER_EXPECTED_END_OF_QUOTE; }
+	DynamicCommandExceptionType BuiltInExceptions::readerInvalidEscape() const { return READER_INVALID_ESCAPE; }
+	DynamicCommandExceptionType BuiltInExceptions::readerInvalidBool() const { return READER_INVALID_BOOL; }
+	DynamicCommandExceptionType BuiltInExceptions::readerInvalidInt() const { return READER_INVALID_INT; }
+	SimpleCommandExceptionType BuiltInExceptions::readerExpectedInt() const { return READER_EXPECTED_INT; }
+	DynamicCommandExceptionType BuiltInExceptions::readerInvalidLong() const  { return READER_INVALID_LONG; }
+	SimpleCommandExceptionType BuiltInExceptions::readerExpectedLong() const { return READER_EXPECTED_LONG; }
+	DynamicCommandExceptionType BuiltInExceptions::readerInvalidDouble() const { return READER_INVALID_DOUBLE; }
+	SimpleCommandExceptionType BuiltInExceptions::readerExpectedDouble() const { return READER_EXPECTED_DOUBLE; }
+	DynamicCommandExceptionType BuiltInExceptions::readerInvalidFloat() const { return READER_INVALID_FLOAT; }
+	SimpleCommandExceptionType BuiltInExceptions::readerExpectedFloat() const { return READER_EXPECTED_FLOAT; }
+	SimpleCommandExceptionType BuiltInExceptions::readerExpectedBool() const { return READER_EXPECTED_BOOL; }
+	DynamicCommandExceptionType BuiltInExceptions::readerExpectedSymbol() const { return READER_EXPECTED_SYMBOL; }
+	SimpleCommandExceptionType BuiltInExceptions::dispatcherUnknownCommand() const { return DISPATCHER_UNKNOWN_COMMAND; }
+	SimpleCommandExceptionType BuiltInExceptions::dispatcherUnknownArgument() const { return DISPATCHER_UNKNOWN_ARGUMENT; }
+	SimpleCommandExceptionType BuiltInExceptions::dispatcherExpectedArgumentSeparator() const { return DISPATCHER_EXPECTED_ARGUMENT_SEPARATOR; }
+	DynamicCommandExceptionType BuiltInExceptions::dispatcherParseException() const { return DISPATCHER_PARSE_EXCEPTION; }
 
 #endif
 
