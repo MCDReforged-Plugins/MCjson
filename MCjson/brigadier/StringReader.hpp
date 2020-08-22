@@ -220,22 +220,23 @@ namespace brigadier {
 	std::string StringReader::readStringUntil(char terminator) {
 		StringBuilder<char> result;
 		bool escaped = false;
+		
 		while (this->canRead()) {
 			const char c = this->read();
 			if (escaped) {
-				if (c == terminator || c == SYNTAX_ESCAPE) {
-					result.Append({c,0});
-					escaped = false;
-				} else {
+				if (c != terminator && c != SYNTAX_ESCAPE) {
 					this->setCursor(this->getCursor() - 1);
 					throw CommandSyntaxException::BUILT_IN_EXCEPTIONS->readerInvalidEscape().createWithContext(this, std::string({ c,0 }));
 				}
+				
+				result.Append(std::string({c,0}).c_str());
+				escaped = false;
 			} else if (c == SYNTAX_ESCAPE) {
 				escaped = true;
 			} else if (c == terminator) {
 				return result.ToString();
 			} else {
-				result.Append({ c,0 });
+				result.Append(std::string({ c,0 }).c_str());
 ;			}
 		}
 		
@@ -272,7 +273,9 @@ namespace brigadier {
 	}
 
 	void StringReader::expect(char c) {
-		if (!this->canRead() || this->peek() != c) {
+		if (this->canRead() && this->peek() == c) {
+			this->skip();
+		} else {
 			throw CommandSyntaxException::BUILT_IN_EXCEPTIONS->readerExpectedSymbol().createWithContext(this, std::string({ c,0 }));
 		}
 	}
