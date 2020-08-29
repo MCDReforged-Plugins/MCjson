@@ -71,36 +71,37 @@ boost::python::object JsonToNBT::readTypedValue() {
 boost::python::object JsonToNBT::type(string stringIn) {
 	try {
 		if (FLOAT_PATTERN.Match(stringIn)) {
-			return boost::python::make_tuple(std::stof(stringIn.substr(0, stringIn.length())))[0];  //FloatNBT
+			return boost::python::make_tuple(std::stof(stringIn.substr(0, stringIn.length() - 1)))[0];  //FloatNBT
 		}
 		if (BYTE_PATTERN.Match(stringIn)) {
-			return boost::python::str(stringIn.substr(0, stringIn.length()));  //ByteNBT -> Str
+			return boost::python::long_(stringIn.substr(0, stringIn.length() - 1));  //ByteNBT -> Int
 		}
 		if (LONG_PATTERN.Match(stringIn)) {
-			return boost::python::make_tuple(std::stol(stringIn.substr(0, stringIn.length())))[0];  //LongNBT
+			return boost::python::make_tuple(std::stol(stringIn.substr(0, stringIn.length() - 1)))[0];  //LongNBT
 		}
 		if (SHORT_PATTERN.Match(stringIn)) {
-			return boost::python::make_tuple(std::stoi(stringIn.substr(0, stringIn.length())))[0];  //ShortNBT -> Int
+			return boost::python::long_(std::stoi(stringIn.substr(0, stringIn.length() - 1)));  //ShortNBT -> Int
 		}
 		if (INT_PATTERN.Match(stringIn)) {
 			return boost::python::long_(std::stoi(stringIn));  //IntNBT
 		}
 		if (DOUBLE_PATTERN.Match(stringIn)) {
-			return boost::python::make_tuple(std::stod(stringIn.substr(0, stringIn.length())))[0];  //DoubleNBT
+			return boost::python::make_tuple(std::stod(stringIn.substr(0, stringIn.length() - 1)))[0];  //DoubleNBT
 		}
 		if (DOUBLE_PATTERN_NOSUFFIX.Match(stringIn)) {
 			return boost::python::make_tuple(std::stod(stringIn))[0];  //DoubleNBT
 		}
 		if ("true" == stringIn) {
-			return boost::python::long_(1);  //ByteNBT(bool) -> Int
+			return boost::python::object(true);  //ByteNBT(bool) -> Bool
 		}
 		if ("false" == stringIn) {
-			return boost::python::long_(0);  //ByteNBT(bool) -> Int
+			return boost::python::object(true);  //ByteNBT(bool) -> Bool
 		}
 	} catch (std::invalid_argument) {
 		;
 	}
 
+	std::cout << " [Str]" << std::endl;
 	return boost::python::str(stringIn);
 }
 

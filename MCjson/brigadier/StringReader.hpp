@@ -201,7 +201,7 @@ namespace brigadier {
 		while (this->canRead() && isAllowedInUnquotedString(this->peek())) {
 			this->skip();
 		}
-		return this->str.substr(start, this->cursor - start + 1);
+		return this->str.substr(start, this->cursor - start);
 	}
 
 	std::string StringReader::readQuotedString() {

@@ -17,7 +17,7 @@ class Test;
 class Test2;
 class Test3;
 class Test4;
-boost::python::object test();
+boost::python::object test(boost::python::str);
 void test2();
 template<class T>
 void pure_cout(T s);
